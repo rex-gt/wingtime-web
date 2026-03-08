@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header>
-      <div class="logo" @click="$router.push('/dashboard')">✈ Flying Club</div>
+      <div class="logo" @click="$router.push('/dashboard')">✈ WingTime</div>
       <div class="user-info">
         <span class="role-badge" :class="`role-${authStore.userRole}`">{{ authStore.userRole }}</span>
         <button class="btn-secondary" @click="$router.push('/dashboard')">Dashboard</button>

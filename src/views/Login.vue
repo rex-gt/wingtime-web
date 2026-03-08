@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <div class="logo">✈ WingTime Flight Management System</div>
+      <div class="logo">✈ WingTime</div>
       <h1>Welcome to WingTime</h1>
       <p>Sign in to manage your flights</p>
 
