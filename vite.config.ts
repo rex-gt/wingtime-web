@@ -21,6 +21,6 @@ export default defineConfig({
           key: fs.readFileSync(sslKeyPath),
           cert: fs.readFileSync(sslCertPath)
         }
-      : false
+      : undefined
   }
 })
