@@ -499,7 +499,12 @@ async function handleSubmit() {
     return
   }
   try {
-    await reservationsAPI.create(formData.value)
+    const payload = {
+      ...formData.value,
+      start_time: toUTCISOString(formData.value.start_time),
+      end_time: toUTCISOString(formData.value.end_time)
+    }
+    await reservationsAPI.create(payload)
     await loadData()
     showNewForm.value = false
   } catch (error) {
@@ -538,7 +543,12 @@ async function saveEdit() {
     return
   }
   try {
-    await reservationsAPI.update(detailReservation.value.id, editData.value)
+    const payload = {
+      ...editData.value,
+      start_time: toUTCISOString(editData.value.start_time),
+      end_time: toUTCISOString(editData.value.end_time)
+    }
+    await reservationsAPI.update(detailReservation.value.id, payload)
     await loadData()
     closeDetail()
   } catch (error) {
@@ -668,6 +678,16 @@ function formatDayColumnHeader(day: Date): string {
 function toDatetimeLocal(date: Date): string {
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
+// Convert a datetime-local string (local time, no timezone) to a UTC ISO string
+// so the backend always receives unambiguous UTC timestamps.
+function toUTCISOString(datetimeLocal: string): string {
+  const date = new Date(datetimeLocal)
+  if (isNaN(date.getTime())) {
+    throw new Error(`Invalid datetime value: "${datetimeLocal}"`)
+  }
+  return date.toISOString()
 }
 </script>
 
