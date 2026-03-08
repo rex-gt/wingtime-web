@@ -11,8 +11,8 @@ export default defineConfig({
   server: {
     port: 5173,
     https: {
-      key: fs.readFileSync(path.resolve(__dirname, '../flying-club-api/server.key')),
-      cert: fs.readFileSync(path.resolve(__dirname, '../flying-club-api/server.crt'))
+      key: fs.readFileSync(path.resolve(__dirname, '../wingtime-api/server.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, '../wingtime-api/server.crt'))
     }
   }
 })
