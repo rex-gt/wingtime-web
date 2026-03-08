@@ -6,13 +6,21 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// Check if SSL certificates exist (only for local development)
+const sslKeyPath = path.resolve(__dirname, '../wingtime-api/server.key')
+const sslCertPath = path.resolve(__dirname, '../wingtime-api/server.crt')
+const useHttps = fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)
+
 export default defineConfig({
   plugins: [vue()],
   server: {
     port: 5173,
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, '../wingtime-api/server.key')),
-      cert: fs.readFileSync(path.resolve(__dirname, '../wingtime-api/server.crt'))
-    }
+    // Enable HTTPS if certificates are available
+    https: useHttps
+      ? {
+          key: fs.readFileSync(sslKeyPath),
+          cert: fs.readFileSync(sslCertPath)
+        }
+      : false
   }
 })
