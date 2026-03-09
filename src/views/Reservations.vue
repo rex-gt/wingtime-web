@@ -185,9 +185,9 @@
         <!-- Edit Mode -->
         <form v-else @submit.prevent="saveEdit">
           <div class="form-row">
-            <div class="form-group">
+            <div v-if="!authStore.isMember" class="form-group">
               <label>Member</label>
-              <select v-model="editData.member_id" required>
+              <select v-model="editData.member_id" :required="!authStore.isMember">
                 <option :value="0">Select Member</option>
                 <option v-for="m in members" :key="m.id" :value="m.id">
                   {{ m.first_name }} {{ m.last_name }}
@@ -243,9 +243,9 @@
         </div>
         <form @submit.prevent="handleSubmit">
           <div class="form-row">
-            <div class="form-group">
+            <div v-if="!authStore.isMember" class="form-group">
               <label>Member</label>
-              <select v-model="formData.member_id" required>
+              <select v-model="formData.member_id" :required="!authStore.isMember">
                 <option :value="0">Select Member</option>
                 <option v-for="m in members" :key="m.id" :value="m.id">
                   {{ m.first_name }} {{ m.last_name }}
@@ -483,7 +483,7 @@ function handleTimeSlotClick(day: Date, hour: number) {
 // ── New Reservation ───────────────────────────────────────
 function openNewReservationForm(start?: Date, end?: Date) {
   formData.value = {
-    member_id: 0,
+    member_id: authStore.isMember && authStore.user ? authStore.user.id : 0,
     aircraft_id: selectedAircraftId.value > 0 ? selectedAircraftId.value : 0,
     start_time: start ? toDatetimeLocal(start) : '',
     end_time: end ? toDatetimeLocal(end) : '',
