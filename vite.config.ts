@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import fs from 'fs'
@@ -22,5 +23,11 @@ export default defineConfig({
           cert: fs.readFileSync(sslCertPath)
         }
       : undefined
+  },
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    include: ['src/**/*.test.ts'],
+    setupFiles: ['src/__tests__/setup.ts']
   }
 })
