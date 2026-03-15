@@ -96,16 +96,6 @@ describe('authAPI', () => {
       password: 'newpass'
     })
   })
-
-  it('register posts to /users/register', () => {
-    authAPI.register('John', 'Doe', 'john@example.com', 'pass123')
-    expect(mockPost).toHaveBeenCalledWith('/users/register', {
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'john@example.com',
-      password: 'pass123'
-    })
-  })
 })
 
 describe('membersAPI', () => {

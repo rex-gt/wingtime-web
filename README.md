@@ -191,7 +191,6 @@ Unauthenticated users are redirected to `/login`. Non-admins visiting `/members`
 
 ```typescript
 authAPI.login(email, password)
-authAPI.register(firstName, lastName, email, password)
 authAPI.getProfile()
 authAPI.updateProfile(data)
 
@@ -215,7 +214,7 @@ Core types defined in `src/types/index.ts`:
 - `Reservation` — booking with status (`scheduled | completed | cancelled`)
 - `FlightLog` — flight record with computed `tach_hours`
 - `BillingRecord` — billing per flight log
-- `AuthResponse` — login/register token response
+- `AuthResponse` — login token response
 
 ## Build for Production
 

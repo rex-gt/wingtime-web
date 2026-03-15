@@ -32,9 +32,6 @@ export const authAPI = {
   login: (email: string, password: string) =>
     api.post<AuthResponse>('/users/login', { email, password }),
 
-  register: (firstName: string, lastName: string, email: string, password: string) =>
-    api.post('/users/register', { first_name: firstName, last_name: lastName, email, password }),
-
   getProfile: () =>
     api.get<User>('/users/profile'),
 
