@@ -45,16 +45,35 @@ echo "Current Vercel project:"
 vercel project ls 2>/dev/null || echo "Linked to Vercel"
 echo ""
 
-# Get API URL
+# Get API URL from .env file
 echo "=========================================="
 echo "Backend API Configuration"
 echo "=========================================="
 echo ""
-echo "Enter your Railway API URL"
-echo "Example: https://aerobook-api-production.up.railway.app"
-echo ""
-read -p "API URL: " api_url
-echo ""
+
+# Resolve the project root (two levels up from scripts/vercel/)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ENV_FILE="$PROJECT_ROOT/.env"
+
+api_url=""
+if [ -f "$ENV_FILE" ]; then
+    api_url=$(grep -E '^VITE_API_URL=' "$ENV_FILE" | head -1 | cut -d'=' -f2-)
+fi
+
+if [ -z "$api_url" ]; then
+    echo "⚠️  VITE_API_URL not found in $ENV_FILE"
+    echo ""
+    echo "Enter your Railway API URL"
+    echo "Example: https://aerobook-api-production.up.railway.app"
+    echo ""
+    read -p "API URL: " api_url
+    echo ""
+else
+    echo "Read from $ENV_FILE:"
+    echo "  VITE_API_URL=$api_url"
+    echo ""
+fi
 
 # Validate URL
 if [[ ! $api_url =~ ^https?:// ]]; then
@@ -84,6 +103,13 @@ fi
 # Set environment variables
 echo ""
 echo "Setting Vercel environment variables..."
+echo ""
+
+# Remove existing VITE_API_URL if present (suppress errors if not set)
+echo "Removing existing VITE_API_URL (if any)..."
+vercel env rm VITE_API_URL production -y 2>/dev/null
+vercel env rm VITE_API_URL preview -y 2>/dev/null
+vercel env rm VITE_API_URL development -y 2>/dev/null
 echo ""
 
 # Production
