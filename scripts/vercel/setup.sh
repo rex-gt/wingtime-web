@@ -126,18 +126,18 @@ echo ""
 
 # Production
 echo "Setting for Production..."
-vercel env add VITE_API_URL production <<< "$api_url"
+printf '%s' "$api_url" | vercel env add VITE_API_URL production
 
 # Preview
 echo "Setting for Preview..."
-vercel env add VITE_API_URL preview <<< "$api_url"
+printf '%s' "$api_url" | vercel env add VITE_API_URL preview
 
 # Development (optional - usually uses localhost)
 read -p "Set for Development environment too? (y/n) " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "Setting for Development..."
-    vercel env add VITE_API_URL development <<< "$api_url"
+    printf '%s' "$api_url" | vercel env add VITE_API_URL development
 else
     echo "Skipping Development (will use local .env)"
 fi
