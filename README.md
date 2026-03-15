@@ -1,6 +1,6 @@
-# WingTime Flight Management System - Web
+# AeroBook Flight Management System - Web
 
-Vue 3 frontend web application for WingTime Flight Management System — a role-aware scheduling and management interface for flying clubs.
+Vue 3 frontend web application for AeroBook Flight Management System — a role-aware scheduling and management interface for flying clubs.
 
 ## Features
 

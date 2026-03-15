@@ -4,7 +4,7 @@
 # View deployment and runtime logs
 
 echo "=========================================="
-echo "WingTime - Vercel Logs"
+echo "AeroBook - Vercel Logs"
 echo "=========================================="
 echo ""
 

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Vercel Environment Variables Setup Script
-# Sets up all environment variables for WingTime web app
+# Sets up all environment variables for AeroBook web app
 
 echo "=========================================="
-echo "WingTime - Vercel Setup"
+echo "AeroBook - Vercel Setup"
 echo "=========================================="
 echo ""
 
@@ -23,7 +23,7 @@ echo ""
 # Check if in a git repo
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
     echo "❌ Not in a git repository."
-    echo "Please run this from your wingtime-web directory."
+    echo "Please run this from your aerobook-web directory."
     exit 1
 fi
 
@@ -51,7 +51,7 @@ echo "Backend API Configuration"
 echo "=========================================="
 echo ""
 echo "Enter your Railway API URL"
-echo "Example: https://wingtime-api-production.up.railway.app"
+echo "Example: https://aerobook-api-production.up.railway.app"
 echo ""
 read -p "API URL: " api_url
 echo ""

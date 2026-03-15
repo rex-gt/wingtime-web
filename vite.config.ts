@@ -7,8 +7,8 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // Check if SSL certificates exist (only for local development)
-const sslKeyPath = path.resolve(__dirname, '../wingtime-api/server.key')
-const sslCertPath = path.resolve(__dirname, '../wingtime-api/server.crt')
+const sslKeyPath = path.resolve(__dirname, '../aerobook-api/server.key')
+const sslCertPath = path.resolve(__dirname, '../aerobook-api/server.crt')
 const useHttps = fs.existsSync(sslKeyPath) && fs.existsSync(sslCertPath)
 
 export default defineConfig({

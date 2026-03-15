@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header>
-      <div class="logo" @click="$router.push('/dashboard')">✈ WingTime</div>
+      <div class="logo" @click="$router.push('/dashboard')">✈ AeroBook</div>
       <div class="user-info">
         <button class="btn-secondary" @click="$router.push('/dashboard')">Dashboard</button>
         <button class="btn-secondary" @click="authStore.logout()">Logout</button>

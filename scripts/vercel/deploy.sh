@@ -4,7 +4,7 @@
 # Triggers deployment with options
 
 echo "=========================================="
-echo "WingTime - Vercel Deploy"
+echo "AeroBook - Vercel Deploy"
 echo "=========================================="
 echo ""
 

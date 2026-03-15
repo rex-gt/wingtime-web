@@ -1,7 +1,7 @@
 <template>
   <div class="reset-container">
     <div class="reset-box">
-      <div class="logo">✈ WingTime</div>
+      <div class="logo">✈ AeroBook</div>
 
       <template v-if="!success">
         <h1>Set Your Password</h1>

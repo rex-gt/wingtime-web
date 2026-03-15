@@ -4,7 +4,7 @@
 # Configures build settings, deployment settings, etc.
 
 echo "=========================================="
-echo "WingTime - Vercel Project Configuration"
+echo "AeroBook - Vercel Project Configuration"
 echo "=========================================="
 echo ""
 

@@ -1,8 +1,8 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <div class="logo">✈ WingTime</div>
-      <h1>Welcome to WingTime</h1>
+      <div class="logo">✈ AeroBook</div>
+      <h1>Welcome to AeroBook</h1>
       <p>Sign in to manage your flights</p>
 
       <div v-if="errorMessage" class="alert alert-error">

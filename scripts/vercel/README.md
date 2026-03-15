@@ -1,4 +1,4 @@
-# Vercel CLI Scripts for WingTime Web
+# Vercel CLI Scripts for AeroBook Web
 
 Batch scripts to manage Vercel deployments and settings from your local CLI.
 
@@ -16,7 +16,7 @@ Batch scripts to manage Vercel deployments and settings from your local CLI.
 
 3. **Link to your project:**
    ```bash
-   cd wingtime-web
+   cd aerobook-web
    vercel link
    ```
 
@@ -33,7 +33,7 @@ chmod +x vercel-setup.sh
 ```
 
 **What you need:**
-- Your Railway API URL (e.g., `https://wingtime-api-production.up.railway.app`)
+- Your Railway API URL (e.g., `https://aerobook-api-production.up.railway.app`)
 
 **Variables it sets:**
 - `VITE_API_URL` - Backend API endpoint
@@ -121,7 +121,7 @@ npm install -g vercel
 vercel login
 
 # 3. Navigate to your project
-cd wingtime-web
+cd aerobook-web
 
 # 4. Link to Vercel
 vercel link
@@ -172,10 +172,10 @@ git push
 **VITE_API_URL** - Your backend API URL
 ```bash
 # Production
-VITE_API_URL=https://wingtime-api-production.up.railway.app
+VITE_API_URL=https://aerobook-api-production.up.railway.app
 
 # Preview/Development  
-VITE_API_URL=https://wingtime-api-staging.up.railway.app
+VITE_API_URL=https://aerobook-api-staging.up.railway.app
 ```
 
 ### How Vite Uses Environment Variables
@@ -240,12 +240,12 @@ The `vercel-configure.sh` script creates this file:
 
 ### Production
 - Branch: `main`
-- URL: `https://wingtime.vercel.app` (your custom domain)
+- URL: `https://aerobook.vercel.app` (your custom domain)
 - Auto-deploys on push to main
 
 ### Preview
 - Branch: Any non-main branch or PR
-- URL: `https://wingtime-[random].vercel.app`
+- URL: `https://aerobook-[random].vercel.app`
 - Auto-deploys on push to PR branches
 
 ### Development
@@ -351,7 +351,7 @@ vercel
 ## Project Structure
 
 ```
-wingtime-web/
+aerobook-web/
 ├── scripts/
 │   └── vercel/
 │       ├── setup.sh           # Setup environment variables
