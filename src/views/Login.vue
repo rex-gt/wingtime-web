@@ -1,7 +1,10 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <div class="logo">✈ AeroBook</div>
+      <div class="logo" @click="$router.push('/')">
+        <img src="/aerobook-logo.png" alt="AeroBook Logo" class="logo-img" />
+        <span>AeroBook</span>
+      </div>
       <h1>Welcome to AeroBook</h1>
       <p>Sign in to manage your flights</p>
 

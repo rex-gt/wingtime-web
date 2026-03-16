@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <header>
-      <div class="logo" @click="$router.push('/dashboard')">✈ AeroBook</div>
+      <div class="logo" @click="$router.push('/dashboard')">
+        <img src="/aerobook-logo.png" alt="AeroBook Logo" class="logo-img" />
+        <span>AeroBook</span>
+      </div>
       <div class="user-info">
         <span v-if="authStore.user" class="user-details">
           {{ authStore.user.first_name }} {{ authStore.user.last_name }}
