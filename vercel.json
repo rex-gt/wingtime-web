@@ -1,4 +1,3 @@
 {
-  "framework": "vue",
-  "nodeVersion": "20.x"
+  "framework": "vue"
 }
