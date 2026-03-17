@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <div class="login-box">
-      <img src="/aerobook-logo-dark-mode.png" alt="AeroBook" class="logo" />
+      <img src="/aerobook-logo.svg" alt="AeroBook" class="logo" />
       <h1>Welcome to AeroBook</h1>
       <p>Sign in to manage your flights</p>
 
