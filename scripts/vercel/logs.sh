@@ -26,6 +26,10 @@ if [ ! -f .vercel/project.json ]; then
     exit 1
 fi
 
+echo "Current project:"
+cat .vercel/project.json 2>/dev/null | grep "projectId" | head -1
+echo ""
+
 echo "Log Options:"
 echo "1. Latest deployment logs"
 echo "2. Production deployment logs"
@@ -41,12 +45,12 @@ case $log_type in
     1)
         echo "Fetching latest deployment logs..."
         echo ""
-        vercel logs
+        vercel logs --no-branch
         ;;
     2)
         echo "Fetching production deployment logs..."
         echo ""
-        vercel logs --prod
+        vercel logs --environment production
         ;;
     3)
         echo "Following live logs (Ctrl+C to stop)..."
