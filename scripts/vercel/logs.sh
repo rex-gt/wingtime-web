@@ -45,12 +45,33 @@ case $log_type in
     1)
         echo "Fetching latest deployment logs..."
         echo ""
-        vercel logs --no-branch
+        # Get the most recent deployment URL
+        latest_url=$(vercel ls --limit 1 2>/dev/null | grep -E 'https://' | awk '{print $2}' | head -1)
+        if [ -n "$latest_url" ]; then
+            vercel logs "$latest_url"
+        else
+            echo "Could not find latest deployment. Trying default..."
+            vercel logs
+        fi
         ;;
     2)
         echo "Fetching production deployment logs..."
         echo ""
-        vercel logs --environment production
+        # Get the production deployment URL
+        # Expect a line containing an https:// deployment URL (e.g., "url: https://...").
+        prod_url=$(vercel inspect --prod 2>/dev/null | grep -Eo 'https://[^ ]+' | head -1)
+        if [ -n "$prod_url" ]; then
+            vercel logs "$prod_url"
+        else
+            # Fallback: list deployments and find production
+            prod_url=$(vercel ls --prod --limit 1 2>/dev/null | grep -E 'https://' | awk '{print $2}' | head -1)
+            if [ -n "$prod_url" ]; then
+                vercel logs "$prod_url"
+            else
+                echo "Could not find production deployment URL."
+                echo "Try: vercel logs <your-production-url>"
+            fi
+        fi
         ;;
     3)
         echo "Following live logs (Ctrl+C to stop)..."
@@ -60,12 +81,24 @@ case $log_type in
     4)
         echo "Fetching build logs..."
         echo ""
-        vercel logs --output=build
+        echo "Note: Build logs are shown during deployment."
+        echo "Fetching latest deployment info..."
+        # Show the latest deployment details which include build info
+        # If `vercel inspect` fails (e.g. no active deployment or older CLI behavior),
+        # fall back to listing the last 5 deployments so the user can pick one to inspect.
+        # Show the latest deployment details which include build info
+        vercel inspect 2>/dev/null || vercel ls --limit 5
         ;;
     5)
         echo "Fetching runtime logs..."
         echo ""
-        vercel logs --output=runtime
+        # Runtime logs are the default for vercel logs
+        latest_url=$(vercel ls --limit 1 2>/dev/null | grep -E 'https://' | awk '{print $2}' | head -1)
+        if [ -n "$latest_url" ]; then
+            vercel logs "$latest_url"
+        else
+            vercel logs
+        fi
         ;;
     *)
         echo "Invalid option."
