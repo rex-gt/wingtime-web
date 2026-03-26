@@ -4,17 +4,18 @@ Vue 3 frontend web application for AeroBook Flight Management System — a role-
 
 ## Features
 
+- **Mobile-First Responsive Design** — Optimized for all devices, from smartphones to desktops
 - **Role-Based Access Control (RBAC)** — Admin, Operator, and Member roles with enforced permissions
 - **Permission-Based UI** — Features show/hide based on the authenticated user's role
 - **Smart Dashboard** — Role-filtered stats, quick actions, and navigation
 - **Member Management** — Admin-only page to register new members and view all members
 - **Aircraft Fleet Management** — Full CRUD for admins/operators; read-only for members
-- **Reservation System** — Create and manage reservations; members see only their own
+- **Reservation System** — Responsive calendar to create and manage bookings; members see only their own
 - **Flight Logs** — Record and review flight hours; role-scoped data access
 - **Billing** — Generate and manage billing records; members can view their own
 - **Profile Management** — Edit personal info and change password
 - **Password Reset** — Set password via secure email link for new members
-- **Dynamic Navigation** — Menu items appear/disappear based on role permissions
+- **Dynamic Navigation** — Responsive sidebar/drawer that adapts to role permissions
 - **JWT Authentication** — Secure token-based auth with automatic renewal on page load
 - **HTTPS Support** — Works with a secured backend
 
@@ -26,33 +27,43 @@ Vue 3 frontend web application for AeroBook Flight Management System — a role-
 - **Vue Router** — Client-side routing with authentication and role guards
 - **Pinia** — State management with permission helpers
 - **Axios** — HTTP client with JWT interceptor
+- **Vanilla CSS** — Custom responsive design system without external CSS frameworks
 
 ## Project Structure
 
 ```
-src/
-├── App.vue              # Root component (renders router-view)
-├── main.ts              # Application entry point
-├── env.d.ts             # Vite environment type declarations
-├── style.css            # Global styles
-├── router/
-│   └── index.ts         # Routes with requiresAuth and requiresAdmin guards
-├── stores/
-│   └── auth.ts          # Pinia auth store with role/permission computed properties
-├── types/
-│   └── index.ts         # TypeScript interfaces (Member, Aircraft, Reservation, etc.)
-├── services/
-│   └── api.ts           # Axios instance + typed API methods for all endpoints
-└── views/
-    ├── Login.vue         # Login page
-    ├── ResetPassword.vue # Password reset page (from email link)
-    ├── Dashboard.vue     # Role-filtered stats and quick actions
-    ├── Aircraft.vue      # Aircraft management (admin/operator CRUD; read-only for members)
-    ├── Reservations.vue  # Reservation management (scoped by role)
-    ├── FlightLogs.vue    # Flight log management (scoped by role)
-    ├── Billing.vue       # Billing management (scoped by role)
-    ├── Members.vue       # Member registration and management (admin only)
-    └── Profile.vue       # Edit personal info and change password
+.
+├── GEMINI.md            # Project mandates and development rules
+├── index.html           # HTML template
+├── package.json         # Dependencies and scripts
+├── tsconfig.json        # TypeScript configuration
+├── vite.config.ts       # Vite configuration
+└── src/
+    ├── App.vue          # Root component
+    ├── main.ts          # Application entry point
+    ├── style.css        # Global responsive design system & variables
+    ├── components/
+    │   └── AppLayout.vue # Main layout with responsive header and drawer
+    ├── router/
+    │   └── index.ts      # Routes with role-based navigation guards
+    ├── stores/
+    │   └── auth.ts       # Pinia auth store with permission logic
+    ├── types/
+    │   └── index.ts      # TypeScript interfaces
+    ├── services/
+    │   └── api.ts        # Typed API service layer
+    ├── utils/
+    │   └── reservations.ts # Calendar and date utility functions
+    └── views/
+        ├── Login.vue         # Responsive login page
+        ├── ResetPassword.vue # Secure password setup
+        ├── Dashboard.vue     # Main landing page with club stats
+        ├── Aircraft.vue      # Fleet management
+        ├── Reservations.vue  # Mobile-friendly booking calendar
+        ├── FlightLogs.vue    # Flight history
+        ├── Billing.vue       # Invoices and payments
+        ├── Members.vue       # User administration (Admin only)
+        └── Profile.vue       # Personal settings
 ```
 
 ## User Roles & Permissions

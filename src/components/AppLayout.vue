@@ -9,7 +9,7 @@
         </button>
         <img src="/aerobook-logo.svg" alt="AeroBook" class="logo" @click="$router.push('/dashboard')" />
       </div>
-      <div class="user-info">
+      <div class="user-info desktop-only">
         <span v-if="authStore.user" class="user-details">
           {{ authStore.user.first_name }} {{ authStore.user.last_name }}
           <span class="role-badge" :class="`role-${authStore.userRole}`">{{ authStore.userRole }}</span>
@@ -25,7 +25,21 @@
         <span class="drawer-title">Menu</span>
         <button class="drawer-close" @click="drawerOpen = false" aria-label="Close menu">&times;</button>
       </div>
+
+      <!-- User info in drawer (mobile only) -->
+      <div v-if="authStore.user" class="drawer-user-info mobile-only">
+        <div class="drawer-user-details">
+          <p class="drawer-user-name">{{ authStore.user.first_name }} {{ authStore.user.last_name }}</p>
+          <span class="role-badge" :class="`role-${authStore.userRole}`">{{ authStore.userRole }}</span>
+        </div>
+        <div class="drawer-user-actions">
+          <button class="btn-secondary btn-small" @click="$router.push('/profile'); drawerOpen = false">Profile</button>
+          <button class="btn-secondary btn-small" @click="authStore.logout()">Logout</button>
+        </div>
+      </div>
+
       <nav class="drawer-actions">
+
         <button class="btn-primary drawer-btn" @click="$router.push('/dashboard'); drawerOpen = false">
           Dashboard
         </button>
@@ -140,6 +154,31 @@ const drawerOpen = ref(false)
   gap: 1rem;
 }
 
+.drawer-user-info {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.drawer-user-details {
+  margin-bottom: 1rem;
+}
+
+.drawer-user-name {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--cloud-white);
+}
+
+.drawer-user-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.drawer-user-actions button {
+  flex: 1;
+}
+
 .drawer-btn {
   width: 100%;
   justify-content: flex-start;
@@ -156,32 +195,16 @@ const drawerOpen = ref(false)
   z-index: 200;
 }
 
+@media (max-width: 480px) {
+  .left-drawer {
+    width: 100%;
+  }
+}
+
+
 .user-details {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.role-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.role-admin {
-  background: rgba(239, 68, 68, 0.2);
-  color: var(--danger-red);
-}
-
-.role-operator {
-  background: rgba(251, 146, 60, 0.2);
-  color: var(--accent-orange);
-}
-
-.role-member {
-  background: rgba(14, 165, 233, 0.2);
-  color: var(--sky-blue);
 }
 </style>

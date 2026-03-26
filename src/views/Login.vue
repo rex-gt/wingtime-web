@@ -98,6 +98,16 @@ async function handleLogin() {
   z-index: 1;
 }
 
+@media (max-width: 480px) {
+  .login-box {
+    padding: 2rem 1.5rem;
+  }
+  
+  .login-box h1 {
+    font-size: 1.5rem;
+  }
+}
+
 .logo {
   height: 48px;
   margin-bottom: 1.5rem;

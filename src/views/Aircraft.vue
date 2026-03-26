@@ -219,27 +219,4 @@ input[type="checkbox"] {
   width: auto;
   margin-right: 0.5rem;
 }
-
-.role-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.role-admin {
-  background: rgba(239, 68, 68, 0.2);
-  color: var(--danger-red);
-}
-
-.role-operator {
-  background: rgba(251, 146, 60, 0.2);
-  color: var(--accent-orange);
-}
-
-.role-member {
-  background: rgba(14, 165, 233, 0.2);
-  color: var(--sky-blue);
-}
 </style>
