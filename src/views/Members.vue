@@ -539,84 +539,6 @@ loadMembers()
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 100%);
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  background: rgba(0, 0, 0, 0.4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.logo {
-  font-family: 'Space Mono', monospace;
-  font-size: 1.5rem;
-  font-weight: 700;
-  cursor: pointer;
-  color: #fff;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.user-details {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: #e2e8f0;
-  font-size: 0.9rem;
-}
-
-.role-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.role-admin {
-  background: rgba(239, 68, 68, 0.2);
-  color: #fca5a5;
-}
-
-.role-operator {
-  background: rgba(59, 130, 246, 0.2);
-  color: #93c5fd;
-}
-
-.role-member {
-  background: rgba(34, 197, 94, 0.2);
-  color: #86efac;
-}
-
-.btn-secondary {
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.05);
-  color: #e2e8f0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
 .members-header {
   padding: 2rem;
   text-align: center;
@@ -976,11 +898,6 @@ tbody tr:hover {
 }
 
 @media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
   .members-header {
     padding: 1.5rem;
   }
@@ -990,7 +907,7 @@ tbody tr:hover {
   }
 
   .members-list-card {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
   .form-grid {
@@ -1000,30 +917,28 @@ tbody tr:hover {
   .list-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 1rem;
   }
 
   .list-header-actions {
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
+    gap: 0.75rem;
   }
 
   .search-box {
     width: 100%;
     max-width: none;
   }
-
-  table {
-    font-size: 0.85rem;
-  }
-
-  th,
-  td {
-    padding: 0.5rem;
+  
+  .list-header-actions button {
+    width: 100%;
   }
 
   .modal {
-    margin: 0 1rem;
+    margin: 0 0.5rem;
+    max-height: 95vh;
   }
 }
 </style>

@@ -186,12 +186,12 @@ describe('useAuthStore', () => {
       expect(store.user).not.toBeNull()
     })
 
-    it('navigates to /reservations after successful login', async () => {
+    it('navigates to /dashboard after successful login', async () => {
       mockLogin.mockResolvedValue({ data: { token: 'new-token' } })
       mockGetProfile.mockResolvedValue({ data: makeUser() })
       const store = useAuthStore()
       await store.login('test@example.com', 'password123')
-      expect(mockPush).toHaveBeenCalledWith('/reservations')
+      expect(mockPush).toHaveBeenCalledWith('/dashboard')
     })
 
     it('propagates error when authAPI.login fails', async () => {
