@@ -172,6 +172,12 @@ label {
   z-index: 1;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+}
+
 /* Header */
 header {
   display: flex;
@@ -182,16 +188,50 @@ header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+@media (max-width: 768px) {
+  header {
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+  }
+}
+
 .logo {
   height: 40px;
   width: auto;
   cursor: pointer;
 }
 
+@media (max-width: 480px) {
+  .logo {
+    height: 32px;
+  }
+}
+
 .user-info {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .user-info {
+    gap: 0.5rem;
+  }
+}
+
+/* Responsive Utilities */
+.mobile-only {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block !important;
+  }
+  
+  .desktop-only {
+    display: none !important;
+  }
 }
 
 /* Tables */
@@ -201,11 +241,25 @@ header {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+  width: 100%;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px; /* Ensure table doesn't get too squished */
+}
+
+@media (max-width: 480px) {
+  table {
+    min-width: 500px;
+  }
+  
+  th, td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8rem;
+  }
 }
 
 thead {
@@ -233,6 +287,29 @@ td {
 }
 
 /* Status badges */
+.role-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.role-admin {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger-red);
+}
+
+.role-operator {
+  background: rgba(251, 146, 60, 0.2);
+  color: var(--accent-orange);
+}
+
+.role-member {
+  background: rgba(14, 165, 233, 0.2);
+  color: var(--sky-blue);
+}
+
 .status-badge {
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
@@ -240,6 +317,14 @@ td {
   font-weight: 600;
   text-transform: uppercase;
   display: inline-block;
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .status-badge {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+  }
 }
 
 .status-scheduled {
@@ -257,12 +342,12 @@ td {
   color: var(--danger-red);
 }
 
-.status-available {
+.status-available, .status-active {
   background: rgba(16, 185, 129, 0.2);
   color: var(--success-green);
 }
 
-.status-unavailable {
+.status-unavailable, .status-inactive {
   background: rgba(239, 68, 68, 0.2);
   color: var(--danger-red);
 }
@@ -284,6 +369,12 @@ td {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .form-card, .stat-card {
+    padding: 1.5rem;
+  }
 }
 
 .stat-card {
@@ -312,10 +403,17 @@ td {
   color: var(--sky-blue);
 }
 
+@media (max-width: 480px) {
+  .stat-card .value {
+    font-size: 2rem;
+  }
+}
+
 /* Action buttons */
 .action-buttons {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 /* Page header */
@@ -324,6 +422,18 @@ td {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .page-header h1 {
+    font-size: 1.8rem !important;
+  }
 }
 
 .page-header h1 {
@@ -335,3 +445,4 @@ td {
 .page-header p {
   color: rgba(255, 255, 255, 0.7);
 }
+

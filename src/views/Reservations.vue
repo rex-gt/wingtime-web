@@ -737,11 +737,27 @@ function formatDayColumnHeader(day: Date): string {
   flex-wrap: wrap;
 }
 
+@media (max-width: 768px) {
+  .calendar-toolbar {
+    gap: 1rem;
+  }
+}
+
 .view-switcher {
   display: flex;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   overflow: hidden;
+}
+
+@media (max-width: 480px) {
+  .view-switcher {
+    width: 100%;
+  }
+  
+  .btn-view {
+    flex: 1;
+  }
 }
 
 .btn-view {
@@ -777,6 +793,13 @@ function formatDayColumnHeader(day: Date): string {
   gap: 0.5rem;
 }
 
+@media (max-width: 768px) {
+  .cal-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
 .period-label {
   font-weight: 600;
   font-size: 1.05rem;
@@ -784,8 +807,26 @@ function formatDayColumnHeader(day: Date): string {
   min-width: 200px;
 }
 
+@media (max-width: 480px) {
+  .period-label {
+    min-width: auto;
+    font-size: 0.95rem;
+  }
+}
+
 .aircraft-filter {
   margin-left: auto;
+}
+
+@media (max-width: 768px) {
+  .aircraft-filter {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .aircraft-filter select {
+    width: 100% !important;
+  }
 }
 
 .aircraft-filter select {
@@ -805,6 +846,13 @@ function formatDayColumnHeader(day: Date): string {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   font-size: 0.85rem;
+}
+
+@media (max-width: 480px) {
+  .aircraft-legend {
+    gap: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
 }
 
 .legend-item {
@@ -845,6 +893,13 @@ function formatDayColumnHeader(day: Date): string {
   color: rgba(255, 255, 255, 0.55);
 }
 
+@media (max-width: 480px) {
+  .month-day-names > div {
+    font-size: 0.7rem;
+    padding: 0.4rem 0;
+  }
+}
+
 .month-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -858,6 +913,19 @@ function formatDayColumnHeader(day: Date): string {
   cursor: pointer;
   transition: background 0.15s ease;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .month-cell {
+    min-height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .month-cell {
+    min-height: 60px;
+    padding: 0.2rem;
+  }
 }
 
 .month-cell:hover {
@@ -885,6 +953,14 @@ function formatDayColumnHeader(day: Date): string {
   margin-bottom: 0.25rem;
 }
 
+@media (max-width: 480px) {
+  .cell-date {
+    font-size: 0.75rem;
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+}
+
 .month-cell.today .cell-date {
   background: var(--sky-blue);
   color: white;
@@ -905,6 +981,16 @@ function formatDayColumnHeader(day: Date): string {
   overflow: hidden;
   text-overflow: ellipsis;
   transition: filter 0.15s ease;
+}
+
+@media (max-width: 480px) {
+  .event-chip {
+    font-size: 0.6rem;
+    padding: 1px 3px;
+    height: 6px;
+    text-indent: -9999px; /* Hide text on very small screens */
+    border-radius: 2px;
+  }
 }
 
 .event-chip:hover {
@@ -930,6 +1016,12 @@ function formatDayColumnHeader(day: Date): string {
   flex-shrink: 0;
 }
 
+@media (max-width: 480px) {
+  .time-gutter-header {
+    width: 48px;
+  }
+}
+
 .time-col-header {
   flex: 1;
   text-align: center;
@@ -940,6 +1032,13 @@ function formatDayColumnHeader(day: Date): string {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (max-width: 480px) {
+  .time-col-header {
+    font-size: 0.7rem;
+    padding: 0.5rem 0.1rem;
+  }
 }
 
 .time-col-header.today {
@@ -957,6 +1056,12 @@ function formatDayColumnHeader(day: Date): string {
   flex-shrink: 0;
 }
 
+@media (max-width: 480px) {
+  .time-gutter {
+    width: 48px;
+  }
+}
+
 .time-gutter-label {
   height: 60px;
   display: flex;
@@ -968,10 +1073,23 @@ function formatDayColumnHeader(day: Date): string {
   box-sizing: border-box;
 }
 
+@media (max-width: 480px) {
+  .time-gutter-label {
+    font-size: 0.65rem;
+    padding-right: 4px;
+  }
+}
+
 .time-grid {
   flex: 1;
   display: flex;
   min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .time-grid {
+    min-width: 500px; /* Force horizontal scroll on small screens for week view */
+  }
 }
 
 .time-col {
@@ -1001,6 +1119,13 @@ function formatDayColumnHeader(day: Date): string {
   overflow: hidden;
   transition: filter 0.15s ease;
   z-index: 1;
+}
+
+@media (max-width: 480px) {
+  .cal-event {
+    padding: 2px 4px;
+    font-size: 0.65rem;
+  }
 }
 
 .cal-event:hover {
@@ -1091,6 +1216,13 @@ function formatDayColumnHeader(day: Date): string {
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+@media (max-width: 480px) {
+  .modal-card {
+    max-height: 95vh;
+    padding: 1.5rem 1rem;
+  }
 }
 
 .modal-header {

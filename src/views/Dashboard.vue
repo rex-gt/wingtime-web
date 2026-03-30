@@ -149,9 +149,21 @@ onMounted(() => {
   margin-bottom: 0.5rem;
 }
 
+@media (max-width: 768px) {
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+}
+
 .dashboard-header p {
   color: rgba(255, 255, 255, 0.7);
   font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header p {
+    font-size: 1rem;
+  }
 }
 
 .stats-grid {
