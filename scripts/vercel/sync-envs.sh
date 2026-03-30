@@ -29,13 +29,14 @@ fi
 sync_env() {
     local env_file=$1
     local vercel_env=$2
+    local git_branch=$3
     
     if [ ! -f "$env_file" ]; then
         echo "⚠️  $env_file not found, skipping..."
         return
     fi
     
-    echo "Syncing $env_file to Vercel $vercel_env..."
+    echo "Syncing $env_file to Vercel $vercel_env (branch: ${git_branch:-all})..."
     
     # Extract VITE_API_URL
     local api_url=$(grep -E '^VITE_API_URL=' "$env_file" | head -1 | cut -d'=' -f2- | tr -d '"' | tr -d "'")
@@ -43,9 +44,15 @@ sync_env() {
     if [ -n "$api_url" ]; then
         echo "  VITE_API_URL=$api_url"
         # Remove existing if any (ignore errors)
-        vercel env rm VITE_API_URL "$vercel_env" -y 2>/dev/null
-        # Add new
-        printf '%s' "$api_url" | vercel env add VITE_API_URL "$vercel_env"
+        # Vercel only supports git_branch for 'preview' target
+        if [ "$vercel_env" == "preview" ]; then
+            vercel env rm VITE_API_URL "$vercel_env" "$git_branch" -y 2>/dev/null
+            vercel env add VITE_API_URL "$vercel_env" "$git_branch" --value "$api_url" --yes
+        else
+            # For production/development, we don't pass branch to avoid errors/prompts
+            vercel env rm VITE_API_URL "$vercel_env" -y 2>/dev/null
+            vercel env add VITE_API_URL "$vercel_env" --value "$api_url" --yes
+        fi
         echo "  ✓ Done"
     else
         echo "  ⚠️  VITE_API_URL not found in $env_file"
@@ -54,9 +61,9 @@ sync_env() {
 }
 
 # Sync all environments
-sync_env ".env.development" "development"
-sync_env ".env.preview" "preview"
-sync_env ".env.production" "production"
+sync_env ".env.development" "development" ""
+sync_env ".env.preview" "preview" "preview"
+sync_env ".env.production" "production" "main"
 
 echo "=========================================="
 echo "Sync Complete!"
