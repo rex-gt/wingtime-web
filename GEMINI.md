@@ -5,6 +5,7 @@ This document defines the foundational mandates, architectural standards, and de
 ## 1. Core Mandates
 
 ### Source Control & User Approval
+- **PLAN BEFORE ACTION:** Always perform research and present a concise technical plan (Strategy) for user approval before making any code changes or file modifications.
 - **NO AUTONOMOUS COMMITS:** Never stage or commit changes without explicit user approval.
 - **REVIEW FIRST:** Always present a structured summary of changes and offer a full `git diff` before requesting a commit.
 - **COMMIT MESSAGES:** Propose clear, concise commit messages following conventional commits (e.g., `feat:`, `fix:`, `refactor:`, `docs:`).
@@ -57,11 +58,11 @@ This document defines the foundational mandates, architectural standards, and de
 ## 4. Development Workflow
 
 1.  **Research:** Map relevant files and understand dependencies.
-2.  **Strategy:** Present a concise plan for the requested change.
-3.  **Implementation:** Apply surgical updates, ensuring consistency with existing patterns.
+2.  **Strategy:** Present a concise plan for the requested change for user review and approval. **DO NOT proceed to implementation without user confirmation.**
+3.  **Implementation:** Apply surgical updates only after the plan is approved, ensuring consistency with existing patterns.
 4.  **Validation:** 
     - Run `npm test`.
     - Audit CSS for responsiveness.
     - Verify role-based permissions if the change affects access.
-5.  **Review:** Present changes to the user for approval.
+5.  **Review:** Present actual code changes to the user for final approval.
 6.  **Commit:** Perform the commit only after explicit user confirmation.
