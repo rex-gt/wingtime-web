@@ -1,9 +1,9 @@
-name: Test and Deploy to Vercel Preview
+name: Run Tests
 
 on:
   push:
     branches:
-      - preview
+      - '**'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -24,15 +24,3 @@ jobs:
 
       - name: Run tests
         run: npm test
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
-      - name: Deploy to Preview
-        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }}
