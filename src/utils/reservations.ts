@@ -57,7 +57,16 @@ export function validateReservationTimes(startTime: string, endTime: string): st
   if (!startTime || !endTime) {
     return 'Please provide both a start time and an end time.'
   }
-  if (new Date(endTime) <= new Date(startTime)) {
+  
+  const start = new Date(startTime)
+  const end = new Date(endTime)
+  const now = new Date()
+
+  if (start < now) {
+    return 'Reservations cannot be made in the past.'
+  }
+  
+  if (end <= start) {
     return 'End time must be after start time.'
   }
   return ''

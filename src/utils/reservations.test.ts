@@ -11,37 +11,43 @@ import {
 
 describe('validateReservationTimes', () => {
   it('returns error when start_time is empty', () => {
-    expect(validateReservationTimes('', '2025-06-15T10:00')).toBe(
+    expect(validateReservationTimes('', '2027-06-15T10:00')).toBe(
       'Please provide both a start time and an end time.'
     )
   })
 
   it('returns error when end_time is empty', () => {
-    expect(validateReservationTimes('2025-06-15T09:00', '')).toBe(
+    expect(validateReservationTimes('2027-06-15T09:00', '')).toBe(
       'Please provide both a start time and an end time.'
     )
   })
 
   it('returns error when end time equals start time', () => {
-    expect(validateReservationTimes('2025-06-15T09:00', '2025-06-15T09:00')).toBe(
+    expect(validateReservationTimes('2027-06-15T09:00', '2027-06-15T09:00')).toBe(
       'End time must be after start time.'
     )
   })
 
   it('returns error when end time is before start time', () => {
-    expect(validateReservationTimes('2025-06-15T10:00', '2025-06-15T09:00')).toBe(
+    expect(validateReservationTimes('2027-06-15T10:00', '2027-06-15T09:00')).toBe(
       'End time must be after start time.'
     )
   })
 
+  it('returns error when start time is in the past', () => {
+    expect(validateReservationTimes('2020-01-01T09:00', '2020-01-01T10:00')).toBe(
+      'Reservations cannot be made in the past.'
+    )
+  })
+
   it('returns empty string when times are valid', () => {
-    expect(validateReservationTimes('2025-06-15T09:00', '2025-06-15T10:00')).toBe('')
+    expect(validateReservationTimes('2027-06-15T09:00', '2027-06-15T10:00')).toBe('')
   })
 })
 
 describe('toUTCISOString', () => {
   it('converts a valid datetime-local string to UTC ISO string', () => {
-    const result = toUTCISOString('2025-06-15T09:00')
+    const result = toUTCISOString('2027-06-15T09:00')
     expect(result).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
   })
 
@@ -50,29 +56,29 @@ describe('toUTCISOString', () => {
   })
 
   it('output ends with Z (UTC)', () => {
-    const result = toUTCISOString('2025-06-15T09:00')
+    const result = toUTCISOString('2027-06-15T09:00')
     expect(result).toMatch(/Z$/)
   })
 })
 
 describe('getWeekDays', () => {
   it('returns exactly 7 days', () => {
-    const days = getWeekDays(new Date(2025, 5, 15)) // June 15, 2025 (Sunday)
+    const days = getWeekDays(new Date(2027, 5, 15)) // June 15, 2027 (Sunday)
     expect(days).toHaveLength(7)
   })
 
   it('first day is Sunday', () => {
-    const days = getWeekDays(new Date(2025, 5, 18)) // Wednesday
+    const days = getWeekDays(new Date(2027, 5, 18)) // Wednesday
     expect(days[0].getDay()).toBe(0) // Sunday
   })
 
   it('last day is Saturday', () => {
-    const days = getWeekDays(new Date(2025, 5, 18)) // Wednesday
+    const days = getWeekDays(new Date(2027, 5, 18)) // Wednesday
     expect(days[6].getDay()).toBe(6) // Saturday
   })
 
   it('all days are in consecutive order', () => {
-    const days = getWeekDays(new Date(2025, 5, 18))
+    const days = getWeekDays(new Date(2027, 5, 18))
     for (let i = 1; i < days.length; i++) {
       const diff = days[i].getTime() - days[i - 1].getTime()
       expect(diff).toBe(24 * 60 * 60 * 1000) // exactly one day
@@ -80,7 +86,7 @@ describe('getWeekDays', () => {
   })
 
   it('contains the input date', () => {
-    const input = new Date(2025, 5, 18) // Wednesday June 18
+    const input = new Date(2027, 5, 18) // Wednesday June 18
     const days = getWeekDays(input)
     const found = days.some(d => sameDay(d, input))
     expect(found).toBe(true)
@@ -89,21 +95,21 @@ describe('getWeekDays', () => {
 
 describe('sameDay', () => {
   it('returns true for same date with different times', () => {
-    const a = new Date(2025, 5, 15, 9, 0)
-    const b = new Date(2025, 5, 15, 17, 30)
+    const a = new Date(2027, 5, 15, 9, 0)
+    const b = new Date(2027, 5, 15, 17, 30)
     expect(sameDay(a, b)).toBe(true)
   })
 
   it('returns false for different dates', () => {
-    const a = new Date(2025, 5, 15)
-    const b = new Date(2025, 5, 16)
+    const a = new Date(2027, 5, 15)
+    const b = new Date(2027, 5, 16)
     expect(sameDay(a, b)).toBe(false)
   })
 })
 
 describe('stripTime', () => {
   it('returns a date with hours, minutes, seconds, ms all zero', () => {
-    const result = stripTime(new Date(2025, 5, 15, 14, 30, 45, 500))
+    const result = stripTime(new Date(2027, 5, 15, 14, 30, 45, 500))
     expect(result.getHours()).toBe(0)
     expect(result.getMinutes()).toBe(0)
     expect(result.getSeconds()).toBe(0)
@@ -111,14 +117,14 @@ describe('stripTime', () => {
   })
 
   it('preserves year, month, day', () => {
-    const result = stripTime(new Date(2025, 5, 15, 14, 30))
-    expect(result.getFullYear()).toBe(2025)
+    const result = stripTime(new Date(2027, 5, 15, 14, 30))
+    expect(result.getFullYear()).toBe(2027)
     expect(result.getMonth()).toBe(5)
     expect(result.getDate()).toBe(15)
   })
 
   it('does not mutate the original date', () => {
-    const original = new Date(2025, 5, 15, 14, 30)
+    const original = new Date(2027, 5, 15, 14, 30)
     stripTime(original)
     expect(original.getHours()).toBe(14)
   })
@@ -146,13 +152,13 @@ describe('formatHour', () => {
 
 describe('toDatetimeLocal', () => {
   it('formats date as YYYY-MM-DDTHH:mm', () => {
-    const date = new Date(2025, 5, 15, 9, 30)
-    expect(toDatetimeLocal(date)).toBe('2025-06-15T09:30')
+    const date = new Date(2027, 5, 15, 9, 30)
+    expect(toDatetimeLocal(date)).toBe('2027-06-15T09:30')
   })
 
   it('zero-pads single-digit months, days, hours, and minutes', () => {
-    const date = new Date(2025, 0, 5, 8, 5) // Jan 5, 08:05
-    expect(toDatetimeLocal(date)).toBe('2025-01-05T08:05')
+    const date = new Date(2027, 0, 5, 8, 5) // Jan 5, 08:05
+    expect(toDatetimeLocal(date)).toBe('2027-01-05T08:05')
   })
 })
 
