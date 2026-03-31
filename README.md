@@ -17,6 +17,7 @@ Vue 3 frontend web application for AeroBook Flight Management System — a role-
 - **Password Reset** — Set password via secure email link for new members
 - **Dynamic Navigation** — Responsive sidebar/drawer that adapts to role permissions
 - **JWT Authentication** — Secure token-based auth with automatic renewal on page load
+- **Password Reset** — Request a reset link via email from the login page; secure set/reset flow
 - **HTTPS Support** — Works with a secured backend
 
 ## Tech Stack
