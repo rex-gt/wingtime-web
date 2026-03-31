@@ -33,7 +33,6 @@
         <table>
           <thead>
             <tr>
-              <th class="desktop-only">ID</th>
               <th>Member</th>
               <th>Aircraft</th>
               <th>Start Time</th>
@@ -42,7 +41,6 @@
           </thead>
           <tbody>
             <tr v-for="reservation in displayReservations" :key="reservation.id">
-              <td class="desktop-only">{{ reservation.id }}</td>
               <td>{{ reservation.member_name }}</td>
               <td>{{ reservation.tail_number }} - {{ reservation.make }} {{ reservation.model }}</td>
               <td>{{ formatDate(reservation.start_time) }}</td>
@@ -53,7 +51,7 @@
               </td>
             </tr>
             <tr v-if="displayReservations.length === 0">
-              <td colspan="5" class="no-data">
+              <td colspan="4" class="no-data">
                 No reservations found
               </td>
             </tr>
@@ -68,7 +66,6 @@
             <div class="card-header">
               <div class="res-identity">
                 <h3>{{ reservation.tail_number }} - {{ reservation.make }} {{ reservation.model }}</h3>
-                <span class="res-id">#{{ reservation.id }}</span>
               </div>
               <span class="status-badge" :class="`status-${reservation.status}`">
                 {{ reservation.status }}
