@@ -28,7 +28,7 @@ jobs:
   deploy-preview:
     name: Deploy to Vercel Preview
     needs: test
-    if: github.ref == 'refs/heads/preview'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -40,19 +40,3 @@ jobs:
 
       - name: Deploy to Preview
         run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }}
-
-  deploy-production:
-    name: Deploy to Vercel Production
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
-      - name: Deploy to Production
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
