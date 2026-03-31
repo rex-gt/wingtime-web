@@ -1,0 +1,58 @@
+name: Test and Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+  deploy-preview:
+    name: Deploy to Vercel Preview
+    needs: test
+    if: github.ref == 'refs/heads/preview'
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Preview
+        run: vercel deploy --token=${{ secrets.VERCEL_TOKEN }}
+
+  deploy-production:
+    name: Deploy to Vercel Production
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Production
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
