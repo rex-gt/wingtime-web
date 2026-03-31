@@ -112,7 +112,13 @@ const billing = ref<BillingRecord[]>([])
 const availableAircraft = computed(() => aircraft.value.filter(a => a.is_available).length)
 const upcomingReservations = computed(() => {
   const now = new Date()
-  return reservations.value.filter(r => 
+  let filtered = reservations.value
+  
+  if (authStore.isMember) {
+    filtered = filtered.filter(r => r.member_id === authStore.user?.id)
+  }
+
+  return filtered.filter(r => 
     (r.status === 'scheduled' || r.status === 'in_progress') && 
     new Date(r.end_time) > now
   ).length
@@ -120,7 +126,13 @@ const upcomingReservations = computed(() => {
 const unpaidBills = computed(() => billing.value.filter(b => !b.is_paid).length)
 
 const displayReservations = computed(() => {
-  return [...reservations.value]
+  let filtered = reservations.value
+  
+  if (authStore.isMember) {
+    filtered = filtered.filter(r => r.member_id === authStore.user?.id)
+  }
+
+  return [...filtered]
     .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime())
     .slice(0, 5)
 })
