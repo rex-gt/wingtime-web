@@ -93,4 +93,30 @@ describe('Dashboard.vue', () => {
     await flushPromises()
     expect(wrapper.text()).toContain('Billing')
   })
+
+  it('correctly counts upcoming and in-progress reservations', async () => {
+    const futureDate = new Date()
+    futureDate.setDate(futureDate.getDate() + 1)
+    const futureEnd = new Date(futureDate)
+    futureEnd.setHours(futureEnd.getHours() + 2)
+
+    const pastDate = new Date()
+    pastDate.setDate(pastDate.getDate() - 1)
+    
+    mockReservationsGetAll.mockResolvedValue({
+      data: [
+        makeReservation({ id: 1, status: 'scheduled', start_time: futureDate.toISOString(), end_time: futureEnd.toISOString() }),
+        makeReservation({ id: 2, status: 'in_progress', start_time: new Date().toISOString(), end_time: futureEnd.toISOString() }),
+        makeReservation({ id: 3, status: 'completed', start_time: pastDate.toISOString(), end_time: new Date().toISOString() }),
+        makeReservation({ id: 4, status: 'scheduled', start_time: pastDate.toISOString(), end_time: new Date().toISOString() }), // Expired
+      ]
+    })
+
+    const wrapper = mountDashboard('member')
+    await flushPromises()
+    
+    // Should count ID 1 and ID 2
+    const upcomingCard = wrapper.findAll('.stat-card').find(c => c.text().includes('Upcoming Reservations'))
+    expect(upcomingCard?.find('.value').text()).toBe('2')
+  })
 })

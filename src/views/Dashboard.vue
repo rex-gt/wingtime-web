@@ -33,7 +33,6 @@
         <table>
           <thead>
             <tr>
-              <th class="desktop-only">ID</th>
               <th>Member</th>
               <th>Aircraft</th>
               <th>Start Time</th>
@@ -42,9 +41,8 @@
           </thead>
           <tbody>
             <tr v-for="reservation in displayReservations" :key="reservation.id">
-              <td class="desktop-only">{{ reservation.id }}</td>
-              <td>{{ getMemberName(reservation.member_id) }}</td>
-              <td>{{ getAircraftName(reservation.aircraft_id) }}</td>
+              <td>{{ reservation.member_name }}</td>
+              <td>{{ reservation.tail_number }} - {{ reservation.make }} {{ reservation.model }}</td>
               <td>{{ formatDate(reservation.start_time) }}</td>
               <td>
                 <span class="status-badge" :class="`status-${reservation.status}`">
@@ -53,7 +51,7 @@
               </td>
             </tr>
             <tr v-if="displayReservations.length === 0">
-              <td colspan="5" class="no-data">
+              <td colspan="4" class="no-data">
                 No reservations found
               </td>
             </tr>
@@ -67,8 +65,7 @@
           <div v-for="reservation in displayReservations" :key="reservation.id" class="reservation-mobile-card">
             <div class="card-header">
               <div class="res-identity">
-                <h3>{{ getAircraftName(reservation.aircraft_id) }}</h3>
-                <span class="res-id">#{{ reservation.id }}</span>
+                <h3>{{ reservation.tail_number }} - {{ reservation.make }} {{ reservation.model }}</h3>
               </div>
               <span class="status-badge" :class="`status-${reservation.status}`">
                 {{ reservation.status }}
@@ -78,7 +75,7 @@
             <div class="card-details">
               <div class="detail-row">
                 <span class="detail-label">Member:</span>
-                <span class="detail-value">{{ getMemberName(reservation.member_id) }}</span>
+                <span class="detail-value">{{ reservation.member_name }}</span>
               </div>
               <div class="detail-row">
                 <span class="detail-label">Start Time:</span>
@@ -112,23 +109,43 @@ const billing = ref<BillingRecord[]>([])
 const availableAircraft = computed(() => aircraft.value.filter(a => a.is_available).length)
 const upcomingReservations = computed(() => {
   const now = new Date()
-  return reservations.value.filter(r => 
-    r.status === 'scheduled' && new Date(r.end_time) > now
+  let filtered = reservations.value
+  
+  if (authStore.isMember) {
+    filtered = filtered.filter(r => r.member_id === authStore.user?.id)
+  }
+
+  return filtered.filter(r => 
+    (r.status === 'scheduled' || r.status === 'in_progress') && 
+    new Date(r.end_time) > now
   ).length
 })
 const unpaidBills = computed(() => billing.value.filter(b => !b.is_paid).length)
 
 const displayReservations = computed(() => {
-  return reservations.value.slice(0, 5)
+  const now = new Date()
+  let filtered = reservations.value.filter(r => new Date(r.start_time) < now)
+  
+  if (authStore.isMember) {
+    filtered = filtered.filter(r => r.member_id === authStore.user?.id)
+  }
+
+  return [...filtered]
+    .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime())
+    .slice(0, 5)
 })
 
 async function loadData() {
   try {
     const promises: Promise<any>[] = [
       aircraftAPI.getAll(),
-      reservationsAPI.getAll(),
-      membersAPI.getAll()
+      reservationsAPI.getAll()
     ]
+
+    // Only fetch members list if authorized (prevents 403 crashing the whole load)
+    if (authStore.canManageMembers) {
+      promises.push(membersAPI.getAll())
+    }
 
     if (authStore.canManageBilling) {
       promises.push(billingAPI.getAll())
@@ -138,24 +155,18 @@ async function loadData() {
 
     aircraft.value = results[0].data
     reservations.value = results[1].data
-    members.value = results[2].data
+
+    let nextResultIndex = 2
+    if (authStore.canManageMembers) {
+      members.value = results[nextResultIndex++].data
+    }
 
     if (authStore.canManageBilling) {
-      billing.value = results[3].data
+      billing.value = results[nextResultIndex++].data
     }
   } catch (error) {
     console.error('Error loading dashboard data:', error)
   }
-}
-
-function getMemberName(memberId: number): string {
-  const member = members.value.find(m => m.id === memberId)
-  return member ? `${member.first_name} ${member.last_name}` : `Member #${memberId}`
-}
-
-function getAircraftName(aircraftId: number): string {
-  const plane = aircraft.value.find(a => a.id === aircraftId)
-  return plane ? `${plane.tail_number} - ${plane.make} ${plane.model}` : `Aircraft #${aircraftId}`
 }
 
 function formatDate(dateString: string) {
