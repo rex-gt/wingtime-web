@@ -30,7 +30,8 @@ jobs:
   deploy-preview:
     name: Deploy to Vercel Preview
     needs: test
-    if: github.ref == 'refs/heads/main'
+    # ONLY run on push, NOT on manual trigger
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -58,7 +59,7 @@ jobs:
 
   deploy-production:
     name: Promote to Production
-    # This only runs if you manually click the button in GitHub
+    # ONLY run on manual trigger, NOT push
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     env:
