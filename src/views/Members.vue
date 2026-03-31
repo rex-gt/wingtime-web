@@ -32,7 +32,7 @@
           {{ errorMessage }}
         </div>
 
-        <div class="table-container">
+        <div class="table-container desktop-only">
           <table v-if="filteredMembers.length > 0">
             <thead>
               <tr>
@@ -53,7 +53,7 @@
                 <td>{{ member.first_name }} {{ member.last_name }}</td>
                 <td>{{ member.email }}</td>
                 <td>{{ member.phone || '-' }}</td>
-                <td>
+                <td class="select-cell">
                   <select
                     :value="member.role"
                     @change="updateMemberRole(member.id, $event)"
@@ -64,7 +64,7 @@
                     <option value="admin">Admin</option>
                   </select>
                 </td>
-                <td>
+                <td class="select-cell">
                   <select
                     :value="member.is_active"
                     @change="updateMemberStatus(member.id, $event)"
@@ -95,6 +95,68 @@
               </tr>
             </tbody>
           </table>
+          <div v-else class="no-data">
+            No members found
+          </div>
+        </div>
+
+        <!-- Mobile Member Cards -->
+        <div class="mobile-only members-mobile-list">
+          <div v-if="filteredMembers.length > 0">
+            <div v-for="member in filteredMembers" :key="member.id" class="member-mobile-card">
+              <div class="card-header">
+                <div class="member-identity">
+                  <h3>{{ member.first_name }} {{ member.last_name }}</h3>
+                  <span class="member-num">#{{ member.member_number }}</span>
+                </div>
+                <div class="member-role-badge">
+                  <span class="role-badge" :class="`role-${member.role}`">{{ member.role }}</span>
+                </div>
+              </div>
+              
+              <div class="card-details">
+                <div class="detail-row">
+                  <span class="detail-label">Email:</span>
+                  <span class="detail-value">{{ member.email }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Phone:</span>
+                  <span class="detail-value">{{ member.phone || '-' }}</span>
+                </div>
+              </div>
+
+              <div class="card-controls">
+                <div class="control-group">
+                  <label>Role</label>
+                  <select
+                    :value="member.role"
+                    @change="updateMemberRole(member.id, $event)"
+                    class="role-select"
+                  >
+                    <option value="member">Member</option>
+                    <option value="operator">Operator</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+                <div class="control-group">
+                  <label>Status</label>
+                  <select
+                    :value="member.is_active"
+                    @change="updateMemberStatus(member.id, $event)"
+                    class="status-select"
+                  >
+                    <option :value="true">Active</option>
+                    <option :value="false">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button @click="editMember(member)" class="btn-sm btn-edit">Edit Profile</button>
+                <button @click="confirmDeleteMember(member)" class="btn-sm btn-delete">Delete</button>
+              </div>
+            </div>
+          </div>
           <div v-else class="no-data">
             No members found
           </div>
@@ -738,12 +800,18 @@ tbody tr:hover {
   color: #e2e8f0;
   font-size: 0.85rem;
   cursor: pointer;
+  width: 100%;
+  min-width: 100px;
 }
 
 .role-select:focus,
 .status-select:focus {
   outline: none;
   border-color: rgba(59, 130, 246, 0.5);
+}
+
+.select-cell {
+  min-width: 120px;
 }
 
 .action-buttons {
@@ -936,9 +1004,112 @@ tbody tr:hover {
     width: 100%;
   }
 
+  .role-select,
+  .status-select {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.8rem;
+    min-width: 90px;
+  }
+
+  .select-cell {
+    min-width: 100px;
+    padding: 0.75rem 0.5rem;
+  }
+
   .modal {
     margin: 0 0.5rem;
     max-height: 95vh;
+  }
+
+  /* Modern Mobile Card Styles */
+  .members-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .member-mobile-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .member-identity h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #e2e8f0;
+  }
+
+  .member-num {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+
+  .detail-label {
+    color: #94a3b8;
+  }
+
+  .detail-value {
+    color: #cbd5e1;
+    font-weight: 500;
+  }
+
+  .card-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    background: rgba(59, 130, 246, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .control-group label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #93c5fd;
+    font-weight: 600;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .card-actions button {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
   }
 }
 </style>
