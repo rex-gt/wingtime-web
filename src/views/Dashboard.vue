@@ -123,7 +123,8 @@ const upcomingReservations = computed(() => {
 const unpaidBills = computed(() => billing.value.filter(b => !b.is_paid).length)
 
 const displayReservations = computed(() => {
-  let filtered = reservations.value
+  const now = new Date()
+  let filtered = reservations.value.filter(r => new Date(r.start_time) < now)
   
   if (authStore.isMember) {
     filtered = filtered.filter(r => r.member_id === authStore.user?.id)
