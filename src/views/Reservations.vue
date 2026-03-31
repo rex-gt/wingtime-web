@@ -462,7 +462,7 @@ function goToToday() {
 
 function scrollToBusinessHours() {
   nextTick(() => {
-    if (timeViewBodyRef.value) {
+    if (timeViewBodyRef.value && typeof timeViewBodyRef.value.scrollTo === 'function') {
       timeViewBodyRef.value.scrollTop = (8 - DAY_START_HOUR) * HOUR_HEIGHT
     }
   })
@@ -796,7 +796,8 @@ function formatDayColumnHeader(day: Date): string {
 @media (max-width: 768px) {
   .cal-nav {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 0.75rem;
   }
 }
 
@@ -807,10 +808,11 @@ function formatDayColumnHeader(day: Date): string {
   min-width: 200px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .period-label {
     min-width: auto;
     font-size: 0.95rem;
+    flex: 1;
   }
 }
 
