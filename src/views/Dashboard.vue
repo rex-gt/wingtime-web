@@ -129,9 +129,13 @@ async function loadData() {
   try {
     const promises: Promise<any>[] = [
       aircraftAPI.getAll(),
-      reservationsAPI.getAll(),
-      membersAPI.getAll()
+      reservationsAPI.getAll()
     ]
+
+    // Only fetch members list if authorized (prevents 403 crashing the whole load)
+    if (authStore.canManageMembers) {
+      promises.push(membersAPI.getAll())
+    }
 
     if (authStore.canManageBilling) {
       promises.push(billingAPI.getAll())
@@ -141,10 +145,14 @@ async function loadData() {
 
     aircraft.value = results[0].data
     reservations.value = results[1].data
-    members.value = results[2].data
+
+    let nextResultIndex = 2
+    if (authStore.canManageMembers) {
+      members.value = results[nextResultIndex++].data
+    }
 
     if (authStore.canManageBilling) {
-      billing.value = results[3].data
+      billing.value = results[nextResultIndex++].data
     }
   } catch (error) {
     console.error('Error loading dashboard data:', error)
