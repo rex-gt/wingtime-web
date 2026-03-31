@@ -11,7 +11,6 @@
       <table>
         <thead>
           <tr>
-            <th class="desktop-only">ID</th>
             <th>Member</th>
             <th class="desktop-only">Aircraft</th>
             <th>Date</th>
@@ -24,7 +23,6 @@
         </thead>
         <tbody>
           <tr v-for="bill in billingRecords" :key="bill.id">
-            <td class="desktop-only">#{{ bill.id }}</td>
             <td>{{ getMemberName(bill.member_id) }}</td>
             <td class="desktop-only">{{ getAircraftName(bill.aircraft_id) }}</td>
             <td>{{ formatDate(bill.billing_date) }}</td>
@@ -43,7 +41,7 @@
             </td>
           </tr>
           <tr v-if="billingRecords.length === 0">
-            <td colspan="9" class="no-data">No billing records found</td>
+            <td colspan="8" class="no-data">No billing records found</td>
           </tr>
         </tbody>
       </table>
@@ -56,7 +54,6 @@
           <div class="card-header">
             <div class="bill-identity">
               <h3>{{ getMemberName(bill.member_id) }}</h3>
-              <span class="bill-id">#{{ bill.id }}</span>
             </div>
             <span class="status-badge" :class="bill.is_paid ? 'status-paid' : 'status-unpaid'">
               {{ bill.is_paid ? 'Paid' : 'Unpaid' }}

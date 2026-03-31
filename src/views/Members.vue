@@ -36,7 +36,6 @@
           <table v-if="filteredMembers.length > 0">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Member #</th>
                 <th>Name</th>
                 <th>Email</th>
@@ -48,7 +47,6 @@
             </thead>
             <tbody>
               <tr v-for="member in filteredMembers" :key="member.id">
-                <td>{{ member.id }}</td>
                 <td>{{ member.member_number }}</td>
                 <td>{{ member.first_name }} {{ member.last_name }}</td>
                 <td>{{ member.email }}</td>
