@@ -131,7 +131,7 @@
     <div v-if="detailReservation" class="modal-overlay" @click.self="closeDetail">
       <div class="modal-card form-card">
         <div class="modal-header">
-          <h2>{{ editMode ? 'Edit Reservation' : 'Reservation #' + detailReservation.id }}</h2>
+          <h2>{{ editMode ? 'Edit Reservation' : 'Reservation Details' }}</h2>
           <button class="btn-close" @click="closeDetail">✕</button>
         </div>
 

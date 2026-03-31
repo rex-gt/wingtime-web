@@ -11,7 +11,6 @@
       <table>
         <thead>
           <tr>
-            <th class="desktop-only">ID</th>
             <th>Member</th>
             <th class="desktop-only">Aircraft</th>
             <th>Flight Date</th>
@@ -22,7 +21,6 @@
         </thead>
         <tbody>
           <tr v-for="log in flightLogs" :key="log.id">
-            <td class="desktop-only">#{{ log.id }}</td>
             <td>{{ getMemberName(log.member_id) }}</td>
             <td class="desktop-only">{{ getAircraftName(log.aircraft_id) }}</td>
             <td>{{ formatDate(log.flight_date) }}</td>
@@ -31,7 +29,7 @@
             <td><strong>{{ log.tach_hours }}</strong></td>
           </tr>
           <tr v-if="flightLogs.length === 0">
-            <td colspan="7" class="no-data">No flight logs found</td>
+            <td colspan="6" class="no-data">No flight logs found</td>
           </tr>
         </tbody>
       </table>
@@ -44,7 +42,6 @@
           <div class="card-header">
             <div class="log-identity">
               <h3>{{ getMemberName(log.member_id) }}</h3>
-              <span class="log-id">#{{ log.id }}</span>
             </div>
             <div class="log-date">
               {{ formatDate(log.flight_date) }}
