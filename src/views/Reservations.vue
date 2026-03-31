@@ -204,11 +204,11 @@
           <div class="form-row">
             <div class="form-group">
               <label>Start Time</label>
-              <input v-model="editData.start_time" type="datetime-local" required />
+              <input v-model="editData.start_time" type="datetime-local" :min="minDateTime" required />
             </div>
             <div class="form-group">
               <label>End Time</label>
-              <input v-model="editData.end_time" type="datetime-local" required />
+              <input v-model="editData.end_time" type="datetime-local" :min="minDateTime" required />
             </div>
           </div>
           <div class="form-group">
@@ -263,11 +263,11 @@
           <div class="form-row">
             <div class="form-group">
               <label>Start Time</label>
-              <input v-model="formData.start_time" type="datetime-local" required />
+              <input v-model="formData.start_time" type="datetime-local" :min="minDateTime" required />
             </div>
             <div class="form-group">
               <label>End Time</label>
-              <input v-model="formData.end_time" type="datetime-local" required />
+              <input v-model="formData.end_time" type="datetime-local" :min="minDateTime" required />
             </div>
           </div>
           <div class="form-group">
@@ -308,6 +308,15 @@ const aircraft = ref<Aircraft[]>([])
 const currentView = ref<CalendarView>('week')
 const currentDate = ref(new Date())
 const selectedAircraftId = ref(0)
+
+const minDateTime = computed(() => {
+  const now = new Date()
+  // Round to nearest 15 minutes for better UX
+  now.setMinutes(Math.ceil(now.getMinutes() / 15) * 15)
+  now.setSeconds(0)
+  now.setMilliseconds(0)
+  return toDatetimeLocal(now)
+})
 
 // ── Form State ────────────────────────────────────────────
 const showNewForm = ref(false)
@@ -480,7 +489,12 @@ function handleDayClick(date: Date) {
   start.setHours(9, 0, 0, 0)
   const end = new Date(date)
   end.setHours(10, 0, 0, 0)
-  openNewReservationForm(start, end)
+
+  const min = new Date(minDateTime.value)
+  const finalStart = start < min ? min : start
+  const finalEnd = end <= finalStart ? new Date(finalStart.getTime() + 3600000) : end
+
+  openNewReservationForm(finalStart, finalEnd)
 }
 
 function handleTimeSlotClick(day: Date, hour: number) {
@@ -488,7 +502,12 @@ function handleTimeSlotClick(day: Date, hour: number) {
   start.setHours(hour, 0, 0, 0)
   const end = new Date(day)
   end.setHours(hour + 1, 0, 0, 0)
-  openNewReservationForm(start, end)
+
+  const min = new Date(minDateTime.value)
+  const finalStart = start < min ? min : start
+  const finalEnd = end <= finalStart ? new Date(finalStart.getTime() + 3600000) : end
+
+  openNewReservationForm(finalStart, finalEnd)
 }
 
 // ── New Reservation ───────────────────────────────────────
