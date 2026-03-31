@@ -111,7 +111,10 @@ const billing = ref<BillingRecord[]>([])
 
 const availableAircraft = computed(() => aircraft.value.filter(a => a.is_available).length)
 const upcomingReservations = computed(() => {
-  return reservations.value.filter(r => r.status === 'scheduled').length
+  const now = new Date()
+  return reservations.value.filter(r => 
+    r.status === 'scheduled' && new Date(r.end_time) > now
+  ).length
 })
 const unpaidBills = computed(() => billing.value.filter(b => !b.is_paid).length)
 
