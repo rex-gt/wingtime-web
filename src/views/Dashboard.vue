@@ -29,11 +29,11 @@
 
     <div class="recent-activity">
       <h2>Recent Reservations</h2>
-      <div class="table-container">
+      <div class="table-container desktop-only">
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th class="desktop-only">ID</th>
               <th>Member</th>
               <th>Aircraft</th>
               <th>Start Time</th>
@@ -42,7 +42,7 @@
           </thead>
           <tbody>
             <tr v-for="reservation in displayReservations" :key="reservation.id">
-              <td>{{ reservation.id }}</td>
+              <td class="desktop-only">{{ reservation.id }}</td>
               <td>{{ getMemberName(reservation.member_id) }}</td>
               <td>{{ getAircraftName(reservation.aircraft_id) }}</td>
               <td>{{ formatDate(reservation.start_time) }}</td>
@@ -59,6 +59,37 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Cards for Recent Reservations -->
+      <div class="mobile-only dashboard-mobile-list">
+        <div v-if="displayReservations.length > 0">
+          <div v-for="reservation in displayReservations" :key="reservation.id" class="reservation-mobile-card">
+            <div class="card-header">
+              <div class="res-identity">
+                <h3>{{ getAircraftName(reservation.aircraft_id) }}</h3>
+                <span class="res-id">#{{ reservation.id }}</span>
+              </div>
+              <span class="status-badge" :class="`status-${reservation.status}`">
+                {{ reservation.status }}
+              </span>
+            </div>
+            
+            <div class="card-details">
+              <div class="detail-row">
+                <span class="detail-label">Member:</span>
+                <span class="detail-value">{{ getMemberName(reservation.member_id) }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Start Time:</span>
+                <span class="detail-value">{{ formatDate(reservation.start_time) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="no-data">
+          No reservations found
+        </div>
       </div>
     </div>
   </AppLayout>
@@ -153,16 +184,67 @@ onMounted(() => {
   .dashboard-header h1 {
     font-size: 2rem;
   }
-}
 
-.dashboard-header p {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1.1rem;
-}
-
-@media (max-width: 768px) {
   .dashboard-header p {
     font-size: 1rem;
+  }
+
+  /* Modern Mobile Card Styles for Dashboard */
+  .dashboard-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .reservation-mobile-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .res-identity h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #e2e8f0;
+  }
+
+  .res-id {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+  }
+
+  .detail-label {
+    color: #94a3b8;
+  }
+
+  .detail-value {
+    color: #cbd5e1;
+    font-weight: 500;
   }
 }
 

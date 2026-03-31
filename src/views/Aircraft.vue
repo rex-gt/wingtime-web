@@ -65,15 +65,15 @@
         </form>
       </div>
 
-      <div class="table-container">
+      <div class="table-container desktop-only">
         <table>
           <thead>
             <tr>
               <th>Tail Number</th>
               <th>Make/Model</th>
-              <th>Year</th>
+              <th class="desktop-only">Year</th>
               <th>Hourly Rate</th>
-              <th>Tach Hours</th>
+              <th class="desktop-only">Tach Hours</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -82,9 +82,9 @@
             <tr v-for="plane in aircraft" :key="plane.id">
               <td><strong>{{ plane.tail_number }}</strong></td>
               <td>{{ plane.make }} {{ plane.model }}</td>
-              <td>{{ plane.year }}</td>
+              <td class="desktop-only">{{ plane.year }}</td>
               <td>${{ plane.hourly_rate }}/hr</td>
-              <td>{{ plane.current_tach_hours }}</td>
+              <td class="desktop-only">{{ plane.current_tach_hours }}</td>
               <td>
                 <span class="status-badge" :class="plane.is_available ? 'status-available' : 'status-unavailable'">
                   {{ plane.is_available ? 'Available' : 'Unavailable' }}
@@ -102,6 +102,46 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile Aircraft Cards -->
+      <div class="mobile-only aircraft-mobile-list">
+        <div v-if="aircraft.length > 0">
+          <div v-for="plane in aircraft" :key="plane.id" class="aircraft-mobile-card">
+            <div class="card-header">
+              <div class="aircraft-identity">
+                <h3>{{ plane.tail_number }}</h3>
+                <span class="aircraft-model">{{ plane.make }} {{ plane.model }}</span>
+              </div>
+              <span class="status-badge" :class="plane.is_available ? 'status-available' : 'status-unavailable'">
+                {{ plane.is_available ? 'Available' : 'Unavailable' }}
+              </span>
+            </div>
+            
+            <div class="card-details">
+              <div class="detail-row">
+                <span class="detail-label">Year:</span>
+                <span class="detail-value">{{ plane.year }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Rate:</span>
+                <span class="detail-value">${{ plane.hourly_rate }}/hr</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Tach Hours:</span>
+                <span class="detail-value">{{ plane.current_tach_hours }}</span>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="btn-small btn-secondary" @click="editAircraft(plane)">Edit</button>
+              <button class="btn-small btn-danger" @click="deleteAircraft(plane.id)">Delete</button>
+            </div>
+          </div>
+        </div>
+        <div v-else class="no-data">
+          No aircraft found
+        </div>
       </div>
     </template>
   </AppLayout>
@@ -218,5 +258,74 @@ onMounted(() => {
 input[type="checkbox"] {
   width: auto;
   margin-right: 0.5rem;
+}
+@media (max-width: 768px) {
+  /* Modern Mobile Card Styles for Aircraft */
+  .aircraft-mobile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .aircraft-mobile-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .aircraft-identity h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #e2e8f0;
+  }
+
+  .aircraft-model {
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+
+  .card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+
+  .detail-label {
+    color: #94a3b8;
+  }
+
+  .detail-value {
+    color: #cbd5e1;
+    font-weight: 500;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .card-actions button {
+    flex: 1;
+    justify-content: center;
+  }
 }
 </style>
