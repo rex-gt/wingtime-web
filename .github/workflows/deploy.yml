@@ -46,7 +46,11 @@ jobs:
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          # Load VITE_API_URL from .env.preview and export it for the build
+          export VITE_API_URL=$(grep VITE_API_URL .env.preview | cut -d '=' -f2)
+          echo "Building with VITE_API_URL=$VITE_API_URL"
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy and Alias to Preview Domain
         run: |
