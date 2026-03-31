@@ -4,21 +4,15 @@ Vue 3 frontend web application for AeroBook Flight Management System — a role-
 
 ## Features
 
-- **Mobile-First Responsive Design** — Optimized for all devices, from smartphones to desktops
-- **Role-Based Access Control (RBAC)** — Admin, Operator, and Member roles with enforced permissions
-- **Permission-Based UI** — Features show/hide based on the authenticated user's role
-- **Smart Dashboard** — Role-filtered stats, quick actions, and navigation
-- **Member Management** — Admin-only page to register new members and view all members
-- **Aircraft Fleet Management** — Full CRUD for admins/operators; read-only for members
-- **Reservation System** — Responsive calendar to create and manage bookings; members see only their own
-- **Flight Logs** — Record and review flight hours; role-scoped data access
-- **Billing** — Generate and manage billing records; members can view their own
-- **Profile Management** — Edit personal info and change password
-- **Password Reset** — Set password via secure email link for new members
-- **Dynamic Navigation** — Responsive sidebar/drawer that adapts to role permissions
-- **JWT Authentication** — Secure token-based auth with automatic renewal on page load
-- **Password Reset** — Request a reset link via email from the login page; secure set/reset flow
-- **HTTPS Support** — Works with a secured backend
+- **Modern Responsive Design** — Optimized for all devices using a hybrid layout: high-density tables for desktop and clean, stackable cards for mobile.
+- **Role-Based Access Control (RBAC)** — Admin, Operator, and Member roles with enforced permissions and adapted UI.
+- **Smart Dashboard** — Personalized stats and recent activity. Members see their own upcoming reservations, while admins see club-wide data.
+- **Member Management** — Admin-only interface to manage members with optional welcome email suppression.
+- **Aircraft Fleet Management** — Comprehensive fleet tracking including tach hours and hourly rates.
+- **Reservation System** — Full-featured calendar (Day/Week/Month views) with mobile-optimized navigation.
+- **UI Cleanup** — Technical database IDs removed from all user-facing views for a more professional experience.
+- **Security** — JWT Authentication with automatic session handling and secure HTTPS support.
+- **Password Reset** — Complete "Forgot Password" flow with 10-minute secure email links.
 
 ## Tech Stack
 
