@@ -26,13 +26,13 @@
       <!-- Navigation -->
       <div class="cal-nav">
         <button class="btn-secondary btn-small" @click="navigate(-1)">&#8249;</button>
-        <button class="btn-secondary btn-small" @click="goToToday">Today</button>
+        <button class="btn-secondary btn-small desktop-only" @click="goToToday">Today</button>
         <button class="btn-secondary btn-small" @click="navigate(1)">&#8250;</button>
         <span class="period-label">{{ currentPeriodLabel }}</span>
       </div>
 
       <!-- Aircraft Filter -->
-      <div class="aircraft-filter">
+      <div class="aircraft-filter desktop-only">
         <select v-model="selectedAircraftId">
           <option :value="0">All Aircraft</option>
           <option v-for="plane in aircraft" :key="plane.id" :value="plane.id">
