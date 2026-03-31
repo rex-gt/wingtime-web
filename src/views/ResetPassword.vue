@@ -134,6 +134,16 @@ async function handleReset() {
   z-index: 1;
 }
 
+@media (max-width: 480px) {
+  .reset-box {
+    padding: 2rem 1.5rem;
+  }
+  
+  .reset-box h1 {
+    font-size: 1.5rem;
+  }
+}
+
 .logo {
   font-family: 'Space Mono', monospace;
   font-size: 1.5rem;

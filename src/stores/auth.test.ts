@@ -186,7 +186,7 @@ describe('useAuthStore', () => {
       expect(store.user).not.toBeNull()
     })
 
-    it('navigates to /reservations after successful login', async () => {
+    it('navigates to /dashboard after successful login', async () => {
       mockLogin.mockResolvedValue({ data: { token: 'new-token' } })
       mockGetProfile.mockResolvedValue({ data: makeUser() })
       const store = useAuthStore()

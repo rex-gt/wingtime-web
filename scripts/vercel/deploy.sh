@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Vercel Deploy Script
-# Triggers deployment with options
+# Interactive menu for AeroBook environments
 
 # Always run from project root
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -9,7 +9,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 cd "$PROJECT_ROOT"
 
 echo "=========================================="
-echo "AeroBook - Vercel Deploy"
+echo "AeroBook - Environment Deployment"
 echo "=========================================="
 echo ""
 
@@ -26,25 +26,23 @@ if [ ! -f .vercel/project.json ]; then
     exit 1
 fi
 
-echo "Current project:"
-cat .vercel/project.json 2>/dev/null | grep "projectId" | head -1
+# Environment selection
+echo "Select Target Environment:"
+echo "1. Production  - Live: https://aerobook.app/"
+echo "2. Preview     - Shared: https://preview.aerobook.app/"
+echo "3. Development - Hosted: (Manual CLI push)"
+echo "4. Local       - Machine: http://localhost:5173"
 echo ""
 
-# Deployment options
-echo "Deployment Options:"
-echo "1. Production (live deployment)"
-echo "2. Preview (test deployment)"
-echo "3. Development (local test)"
+read -p "Select environment (1-4): " env_choice
 echo ""
 
-read -p "Select deployment type (1-3): " deploy_type
-echo ""
-
-case $deploy_type in
+case $env_choice in
     1)
-        echo "Deploying to PRODUCTION..."
+        echo "🚀 Deploying to PRODUCTION..."
+        echo "⚠️  This will update the live site at https://aerobook.app/"
         echo ""
-        read -p "This will update your live site. Continue? (y/n) " -n 1 -r
+        read -p "Are you sure? (y/n) " -n 1 -r
         echo ""
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             vercel --prod
@@ -54,14 +52,22 @@ case $deploy_type in
         fi
         ;;
     2)
-        echo "Creating PREVIEW deployment..."
+        echo "🔍 Deploying to PREVIEW..."
+        echo "Updates the shared preview environment at https://preview.aerobook.app/"
         echo ""
         vercel
         ;;
     3)
-        echo "Starting DEVELOPMENT server..."
+        echo "🛠️  Deploying to DEVELOPMENT..."
+        echo "Manual push to Vercel's Development environment"
         echo ""
-        vercel dev
+        # In Vercel CLI, manual pushes are treated as preview deployments
+        # but they will use Development variables if configured on Vercel.
+        vercel
+        ;;
+    4)
+        echo "💻 Starting LOCAL server..."
+        npm run dev
         ;;
     *)
         echo "Invalid option."
@@ -71,12 +77,6 @@ esac
 
 echo ""
 echo "=========================================="
-echo "Deployment Complete!"
+echo "Process Complete!"
 echo "=========================================="
-echo ""
-echo "Useful commands:"
-echo "  vercel inspect          - View deployment details"
-echo "  vercel logs            - View deployment logs"
-echo "  vercel ls              - List all deployments"
-echo "  vercel rollback        - Rollback to previous deployment"
 echo ""

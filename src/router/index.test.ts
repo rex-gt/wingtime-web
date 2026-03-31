@@ -19,7 +19,7 @@ function createTestRouter() {
   return createRouter({
     history: createWebHistory(),
     routes: [
-      { path: '/', redirect: '/reservations' },
+      { path: '/', redirect: '/dashboard' },
       { path: '/login', name: 'Login', component: StubComponent },
       { path: '/reset-password', name: 'ResetPassword', component: StubComponent },
       { path: '/dashboard', name: 'Dashboard', component: StubComponent, meta: { requiresAuth: true } },
@@ -54,7 +54,7 @@ function setupRouter(storeOverrides: { token?: string; user?: ReturnType<typeof 
     } else if (to.meta.requiresAdmin && !authStore.isAdmin) {
       next('/dashboard')
     } else if (to.path === '/login' && authStore.isAuthenticated) {
-      next('/reservations')
+      next('/dashboard')
     } else {
       next()
     }
@@ -118,10 +118,10 @@ describe('Router navigation guards', () => {
       expect(router.currentRoute.value.path).toBe('/reservations')
     })
 
-    it('redirects from /login to /reservations', async () => {
+    it('redirects from /login to /dashboard', async () => {
       const { router } = memberSetup()
       await router.push('/login')
-      expect(router.currentRoute.value.path).toBe('/reservations')
+      expect(router.currentRoute.value.path).toBe('/dashboard')
     })
 
     it('redirects from /members to /dashboard (non-admin)', async () => {
@@ -143,10 +143,10 @@ describe('Router navigation guards', () => {
       expect(router.currentRoute.value.path).toBe('/members')
     })
 
-    it('redirects from /login to /reservations', async () => {
+    it('redirects from /login to /dashboard', async () => {
       const { router } = adminSetup()
       await router.push('/login')
-      expect(router.currentRoute.value.path).toBe('/reservations')
+      expect(router.currentRoute.value.path).toBe('/dashboard')
     })
   })
 })
