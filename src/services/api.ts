@@ -64,6 +64,7 @@ export const membersAPI = {
     password: string;
     role?: string;
     member_number?: string;
+    skip_welcome_email?: boolean;
   }) => api.post<Member>('/members', data),
   update: (id: number, data: Partial<Member>) => api.put<Member>(`/members/${id}`, data),
   delete: (id: number) => api.delete(`/members/${id}`)

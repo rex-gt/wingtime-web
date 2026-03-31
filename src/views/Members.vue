@@ -255,6 +255,18 @@
                   placeholder="Auto-generated if not provided"
                 />
               </div>
+
+              <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                  <input
+                    v-model="newMemberForm.send_welcome_email"
+                    type="checkbox"
+                    id="send_welcome_email"
+                  />
+                  <span>Send Welcome Email</span>
+                </label>
+                <p class="form-help">Sends a link to set their password</p>
+              </div>
             </div>
 
             <div class="modal-footer">
@@ -390,7 +402,8 @@ const newMemberForm = ref({
   phone: '',
   password: '',
   role: 'member',
-  member_number: ''
+  member_number: '',
+  send_welcome_email: true
 })
 
 const filteredMembers = computed(() => {
@@ -425,7 +438,8 @@ function openRegisterModal() {
     phone: '',
     password: '',
     role: 'member',
-    member_number: ''
+    member_number: '',
+    send_welcome_email: true
   }
 }
 
@@ -440,7 +454,8 @@ function closeRegisterModal() {
     phone: '',
     password: '',
     role: 'member',
-    member_number: ''
+    member_number: '',
+    send_welcome_email: true
   }
 }
 
@@ -470,7 +485,8 @@ async function handleRegisterMember() {
       phone: newMemberForm.value.phone || undefined,
       password: newMemberForm.value.password,
       role: newMemberForm.value.role,
-      member_number: newMemberForm.value.member_number || undefined
+      member_number: newMemberForm.value.member_number || undefined,
+      skip_welcome_email: !newMemberForm.value.send_welcome_email
     })
 
     members.value.push(response.data)
@@ -482,7 +498,8 @@ async function handleRegisterMember() {
       phone: '',
       password: '',
       role: 'member',
-      member_number: ''
+      member_number: '',
+      send_welcome_email: true
     }
     successMessage.value = `Member ${response.data.first_name} ${response.data.last_name} registered successfully!`
 
@@ -694,6 +711,33 @@ loadMembers()
   outline: none;
   border-color: rgba(59, 130, 246, 0.5);
   background: rgba(59, 130, 246, 0.05);
+}
+
+.checkbox-group {
+  justify-content: center;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+
+.form-help {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
 }
 
 .btn-primary {
