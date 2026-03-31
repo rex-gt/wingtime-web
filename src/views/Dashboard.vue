@@ -43,8 +43,8 @@
           <tbody>
             <tr v-for="reservation in displayReservations" :key="reservation.id">
               <td class="desktop-only">{{ reservation.id }}</td>
-              <td>{{ getMemberName(reservation.member_id) }}</td>
-              <td>{{ getAircraftName(reservation.aircraft_id) }}</td>
+              <td>{{ reservation.member_name }}</td>
+              <td>{{ reservation.tail_number }} - {{ reservation.make }} {{ reservation.model }}</td>
               <td>{{ formatDate(reservation.start_time) }}</td>
               <td>
                 <span class="status-badge" :class="`status-${reservation.status}`">
@@ -67,7 +67,7 @@
           <div v-for="reservation in displayReservations" :key="reservation.id" class="reservation-mobile-card">
             <div class="card-header">
               <div class="res-identity">
-                <h3>{{ getAircraftName(reservation.aircraft_id) }}</h3>
+                <h3>{{ reservation.tail_number }} - {{ reservation.make }} {{ reservation.model }}</h3>
                 <span class="res-id">#{{ reservation.id }}</span>
               </div>
               <span class="status-badge" :class="`status-${reservation.status}`">
@@ -78,7 +78,7 @@
             <div class="card-details">
               <div class="detail-row">
                 <span class="detail-label">Member:</span>
-                <span class="detail-value">{{ getMemberName(reservation.member_id) }}</span>
+                <span class="detail-value">{{ reservation.member_name }}</span>
               </div>
               <div class="detail-row">
                 <span class="detail-label">Start Time:</span>
@@ -169,16 +169,6 @@ async function loadData() {
   } catch (error) {
     console.error('Error loading dashboard data:', error)
   }
-}
-
-function getMemberName(memberId: number): string {
-  const member = members.value.find(m => m.id === memberId)
-  return member ? `${member.first_name} ${member.last_name}` : `Member #${memberId}`
-}
-
-function getAircraftName(aircraftId: number): string {
-  const plane = aircraft.value.find(a => a.id === aircraftId)
-  return plane ? `${plane.tail_number} - ${plane.make} ${plane.model}` : `Aircraft #${aircraftId}`
 }
 
 function formatDate(dateString: string) {
