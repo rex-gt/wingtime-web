@@ -10,6 +10,7 @@ import type {
 } from '../types'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://localhost:3000/api'
+console.log('[DEBUG] Frontend API_URL:', API_URL)
 
 const api = axios.create({
   baseURL: API_URL,
