@@ -33,7 +33,7 @@ export interface Reservation {
   aircraft_id: number
   start_time: string
   end_time: string
-  status: 'scheduled' | 'completed' | 'cancelled'
+  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled'
   notes?: string
   created_at: string
   updated_at: string
