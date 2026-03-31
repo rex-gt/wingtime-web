@@ -331,9 +331,10 @@ const editData = ref({
   aircraft_id: 0,
   start_time: '',
   end_time: '',
-  status: 'scheduled' as 'scheduled' | 'completed' | 'cancelled',
+  status: 'scheduled' as 'scheduled' | 'in_progress' | 'completed' | 'cancelled',
   notes: ''
 })
+
 
 // ── Calendar Constants ────────────────────────────────────
 const HOUR_HEIGHT = 60        // px per hour row
