@@ -5,6 +5,17 @@
       <p>Welcome back! Here's what's happening with your flying club.</p>
     </div>
 
+    <!-- Alert for reservations needing logs -->
+    <div v-if="needsLogReservations.length > 0" class="alert alert-warning log-prompt-alert">
+      <div class="alert-content">
+        <span class="alert-icon">⚠️</span>
+        <div>
+          <strong>Action Required:</strong> You have {{ needsLogReservations.length }} past reservation{{ needsLogReservations.length > 1 ? 's' : '' }} needing flight details.
+        </div>
+      </div>
+      <button class="btn-primary btn-small" @click="showLogModal = true">Enter Details</button>
+    </div>
+
     <div class="stats-grid">
       <div class="stat-card" v-if="authStore.canManageMembers">
         <h3>Total Members</h3>
@@ -90,12 +101,60 @@
       </div>
     </div>
   </AppLayout>
+
+  <!-- Flight Log Entry Modal -->
+  <div v-if="showLogModal && currentNeedsLogRes" class="modal-overlay" @click.self="showLogModal = false">
+    <div class="modal-card form-card">
+      <div class="modal-header">
+        <h2>Flight Details</h2>
+        <button class="btn-close" @click="showLogModal = false">✕</button>
+      </div>
+      
+      <div class="log-step-info">
+        <p><strong>Aircraft:</strong> {{ currentNeedsLogRes.tail_number }}</p>
+        <p><strong>Date:</strong> {{ formatDate(currentNeedsLogRes.start_time) }}</p>
+      </div>
+
+      <form @submit.prevent="submitFlightLog">
+        <div v-if="logError" class="alert alert-error">{{ logError }}</div>
+        
+        <div class="form-group">
+          <label>Was the flight completed?</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" v-model="logData.completed" :value="true"> Yes
+            </label>
+            <label class="radio-label">
+              <input type="radio" v-model="logData.completed" :value="false"> No
+            </label>
+          </div>
+        </div>
+
+        <div v-if="logData.completed === true" class="form-group">
+          <label>Flight Length (Hours)</label>
+          <input type="number" step="0.1" v-model="logData.hours" required placeholder="e.g. 1.2" min="0.1">
+        </div>
+
+        <div v-if="logData.completed === false" class="form-group">
+          <label>Reason for non-completion</label>
+          <textarea v-model="logData.reason" required placeholder="e.g. Weather, mechanical issue..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary" :disabled="isSubmittingLog">
+            {{ isSubmittingLog ? 'Saving...' : 'Submit' }}
+          </button>
+          <button type="button" class="btn-secondary" @click="showLogModal = false">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
-import { membersAPI, aircraftAPI, reservationsAPI, billingAPI } from '../services/api'
+import { membersAPI, aircraftAPI, reservationsAPI, billingAPI, flightLogsAPI } from '../services/api'
 import type { Member, Aircraft, Reservation, BillingRecord } from '../types'
 import AppLayout from '../components/AppLayout.vue'
 
@@ -105,6 +164,19 @@ const members = ref<Member[]>([])
 const aircraft = ref<Aircraft[]>([])
 const reservations = ref<Reservation[]>([])
 const billing = ref<BillingRecord[]>([])
+const needsLogReservations = ref<Reservation[]>([])
+
+// Log Modal State
+const showLogModal = ref(false)
+const logError = ref('')
+const isSubmittingLog = ref(false)
+const logData = ref({
+  completed: true as boolean | null,
+  hours: 0,
+  reason: ''
+})
+
+const currentNeedsLogRes = computed(() => needsLogReservations.value[0] || null)
 
 const availableAircraft = computed(() => aircraft.value.filter(a => a.is_available).length)
 const upcomingReservations = computed(() => {
@@ -142,6 +214,11 @@ async function loadData() {
       reservationsAPI.getAll()
     ]
 
+    // Fetch reservations that need logs for the current member
+    if (authStore.user?.id) {
+      promises.push(reservationsAPI.getAll({ member_id: authStore.user.id, needs_log: true }))
+    }
+
     // Only fetch members list if authorized (prevents 403 crashing the whole load)
     if (authStore.canManageMembers) {
       promises.push(membersAPI.getAll())
@@ -155,8 +232,12 @@ async function loadData() {
 
     aircraft.value = results[0].data
     reservations.value = results[1].data
-
+    
     let nextResultIndex = 2
+    if (authStore.user?.id) {
+      needsLogReservations.value = results[nextResultIndex++].data
+    }
+
     if (authStore.canManageMembers) {
       members.value = results[nextResultIndex++].data
     }
@@ -166,6 +247,45 @@ async function loadData() {
     }
   } catch (error) {
     console.error('Error loading dashboard data:', error)
+  }
+}
+
+async function submitFlightLog() {
+  if (!currentNeedsLogRes.value) return
+  
+  logError.value = ''
+  isSubmittingLog.value = true
+  
+  try {
+    const res = currentNeedsLogRes.value
+    
+    if (logData.value.completed) {
+      await flightLogsAPI.create({
+        reservation_id: res.id,
+        member_id: res.member_id,
+        aircraft_id: res.aircraft_id,
+        tach_start: 0, // In a full app, this would come from the aircraft current tach
+        tach_end: Number(logData.value.hours),
+        flight_date: new Date(res.start_time).toISOString().split('T')[0]
+      })
+      await reservationsAPI.update(res.id, { status: 'completed' })
+    } else {
+      await reservationsAPI.update(res.id, { 
+        status: 'cancelled', 
+        notes: (res.notes ? res.notes + ' ' : '') + 'Not completed: ' + logData.value.reason 
+      })
+    }
+    
+    await loadData()
+    logData.value = { completed: true, hours: 0, reason: '' }
+    if (needsLogReservations.value.length === 0) {
+      showLogModal.value = false
+    }
+  } catch (error) {
+    console.error('Error submitting log:', error)
+    logError.value = 'Failed to submit flight details. Please try again.'
+  } finally {
+    isSubmittingLog.value = false
   }
 }
 
@@ -186,6 +306,56 @@ onMounted(() => {
 <style scoped>
 .dashboard-header {
   margin-bottom: 3rem;
+}
+
+.log-prompt-alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  background: rgba(251, 146, 60, 0.15);
+  border: 1px solid var(--accent-orange);
+  color: #fed7aa;
+}
+
+.alert-content {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.alert-icon {
+  font-size: 1.25rem;
+}
+
+.log-step-info {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.log-step-info p {
+  margin: 0.25rem 0;
+}
+
+.radio-group {
+  display: flex;
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: none;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.radio-label input {
+  width: auto;
 }
 
 .dashboard-header h1 {

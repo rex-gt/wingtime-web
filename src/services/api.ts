@@ -81,7 +81,8 @@ export const aircraftAPI = {
 
 // Reservations
 export const reservationsAPI = {
-  getAll: () => api.get<Reservation[]>('/reservations'),
+  getAll: (filters?: { member_id?: number; needs_log?: boolean }) => 
+    api.get<Reservation[]>('/reservations', { params: filters }),
   getById: (id: number) => api.get<Reservation>(`/reservations/${id}`),
   create: (data: Partial<Reservation>) => api.post<Reservation>('/reservations', data),
   update: (id: number, data: Partial<Reservation>) => api.put<Reservation>(`/reservations/${id}`, data),
