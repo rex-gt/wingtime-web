@@ -74,6 +74,21 @@ export interface BillingRecord {
   updated_at: string
 }
 
+export interface MaintenanceItem {
+  id: number
+  aircraft_id: number
+  title: string
+  description?: string
+  created_by: number
+  due_date?: string
+  status: 'open' | 'fixed' | 'obsolete'
+  created_at: string
+  updated_at: string
+  // Joined fields
+  tail_number?: string
+  creator_name?: string
+}
+
 export interface AuthResponse {
   token: string
 }
