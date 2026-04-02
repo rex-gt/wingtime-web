@@ -89,6 +89,32 @@ export interface MaintenanceItem {
   creator_name?: string
 }
 
+export interface Squawk {
+  id: number
+  aircraft_id: number
+  severity: 'Low' | 'Urgent' | 'Approved Grounding'
+  description: string
+  observed_date: string
+  created_by: number
+  status: 'open' | 'closed'
+  created_at: string
+  updated_at: string
+  // Joined fields
+  tail_number?: string
+  creator_name?: string
+  comments?: SquawkComment[]
+}
+
+export interface SquawkComment {
+  id: number
+  squawk_id: number
+  user_id: number
+  comment: string
+  created_at: string
+  // Joined fields
+  user_name?: string
+}
+
 export interface AuthResponse {
   token: string
 }

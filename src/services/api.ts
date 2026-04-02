@@ -6,6 +6,8 @@ import type {
   FlightLog, 
   BillingRecord,
   MaintenanceItem,
+  Squawk,
+  SquawkComment,
   AuthResponse,
   User
 } from '../types'
@@ -115,4 +117,14 @@ export const maintenanceAPI = {
   create: (data: Partial<MaintenanceItem>) => api.post<MaintenanceItem>('/maintenance', data),
   update: (id: number, data: Partial<MaintenanceItem>) => api.put<MaintenanceItem>(`/maintenance/${id}`, data),
   delete: (id: number) => api.delete(`/maintenance/${id}`)
+}
+
+// Squawks
+export const squawkAPI = {
+  getAll: (filters?: { aircraft_id?: number; status?: string }) => 
+    api.get<Squawk[]>('/squawks', { params: filters }),
+  getById: (id: number) => api.get<Squawk>(`/squawks/${id}`),
+  create: (data: Partial<Squawk>) => api.post<Squawk>('/squawks', data),
+  addComment: (id: number, comment: string) => api.post<SquawkComment>(`/squawks/${id}/comments`, { comment }),
+  close: (id: number) => api.put<Squawk>(`/squawks/${id}/close`, {})
 }

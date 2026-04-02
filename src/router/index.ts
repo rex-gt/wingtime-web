@@ -55,6 +55,12 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/squawks',
+      name: 'Squawks',
+      component: () => import('../views/Squawks.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/profile',
       name: 'Profile',
       component: () => import('../views/Profile.vue'),
