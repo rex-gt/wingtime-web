@@ -52,6 +52,9 @@
         <button class="btn-primary drawer-btn" @click="$router.push('/reservations'); drawerOpen = false">
           Reservations
         </button>
+        <button class="btn-primary drawer-btn" @click="$router.push('/maintenance'); drawerOpen = false">
+          Maintenance
+        </button>
         <button class="btn-primary drawer-btn" @click="$router.push('/flight-logs'); drawerOpen = false">
           {{ authStore.isAdmin || authStore.isOperator ? 'All Flight Logs' : 'My Flight Logs' }}
         </button>
