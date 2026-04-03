@@ -93,6 +93,7 @@
               <td>
                 <div class="action-buttons">
                   <button class="btn-small btn-secondary" @click="$router.push(`/maintenance?aircraft_id=${plane.id}`)">Maintenance</button>
+                  <button class="btn-small btn-secondary" @click="$router.push(`/squawks?aircraft_id=${plane.id}`)">Squawks</button>
                   <button class="btn-small btn-secondary" @click="editAircraft(plane)">Edit</button>
                   <button class="btn-small btn-danger" @click="deleteAircraft(plane.id)">Delete</button>
                 </div>
@@ -136,6 +137,7 @@
 
             <div class="card-actions">
               <button class="btn-small btn-secondary" @click="$router.push(`/maintenance?aircraft_id=${plane.id}`)">Maintenance</button>
+              <button class="btn-small btn-secondary" @click="$router.push(`/squawks?aircraft_id=${plane.id}`)">Squawks</button>
               <button class="btn-small btn-secondary" @click="editAircraft(plane)">Edit</button>
               <button class="btn-small btn-danger" @click="deleteAircraft(plane.id)">Delete</button>
             </div>
