@@ -257,7 +257,7 @@ import { ref, onMounted, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { aircraftAPI, squawkAPI } from '../services/api'
-import type { Aircraft, Squawk, SquawkComment } from '../types'
+import type { Aircraft, Squawk } from '../types'
 import AppLayout from '../components/AppLayout.vue'
 
 const route = useRoute()
