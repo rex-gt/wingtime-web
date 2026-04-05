@@ -14,17 +14,17 @@
       <!-- View Switcher -->
       <div class="view-switcher">
         <button
-          v-for="v in (['day', 'week', 'month'] as CalendarView[])"
+          v-for="v in (['day', 'week', 'month', 'my'] as CalendarView[])"
           :key="v"
           :class="['btn-view', { active: currentView === v }]"
           @click="currentView = v"
         >
-          {{ v.charAt(0).toUpperCase() + v.slice(1) }}
+          {{ v === 'my' ? 'My Reservations' : v.charAt(0).toUpperCase() + v.slice(1) }}
         </button>
       </div>
 
       <!-- Navigation -->
-      <div class="cal-nav">
+      <div v-if="currentView !== 'my'" class="cal-nav">
         <button class="btn-secondary btn-small" @click="navigate(-1)">&#8249;</button>
         <button class="btn-secondary btn-small desktop-only" @click="goToToday">Today</button>
         <button class="btn-secondary btn-small" @click="navigate(1)">&#8250;</button>
@@ -76,6 +76,43 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ── My Reservations View ──────────────────────────── -->
+    <div v-else-if="currentView === 'my'" class="my-reservations-view">
+      <div v-if="myReservations.length === 0" class="no-data">
+        <p>You have no reservations.</p>
+      </div>
+      <div v-else class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Aircraft</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Status</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="res in myReservations" :key="res.id">
+              <td>{{ getAircraftName(res.aircraft_id) }}</td>
+              <td>{{ formatDate(res.start_time) }}</td>
+              <td>{{ formatDate(res.end_time) }}</td>
+              <td>
+                <span class="status-badge" :class="`status-${res.status}`">
+                  {{ res.status }}
+                </span>
+              </td>
+              <td class="notes-cell">{{ res.notes || '—' }}</td>
+              <td>
+                <button class="btn-secondary btn-small" @click="openDetail(res)">View</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -295,7 +332,7 @@ import {
 } from '../utils/reservations'
 import AppLayout from '../components/AppLayout.vue'
 
-type CalendarView = 'day' | 'week' | 'month'
+type CalendarView = 'day' | 'week' | 'month' | 'my'
 
 const authStore = useAuthStore()
 
@@ -391,6 +428,14 @@ const filteredReservations = computed(() =>
     ? reservations.value
     : reservations.value.filter(r => r.aircraft_id === selectedAircraftId.value)
 )
+
+const myReservations = computed(() => {
+  const userId = authStore.user?.id
+  if (!userId) return []
+  return reservations.value
+    .filter(r => r.member_id === userId)
+    .sort((a, b) => new Date(b.start_time).getTime() - new Date(a.start_time).getTime())
+})
 
 const currentPeriodLabel = computed(() => {
   const d = currentDate.value
@@ -1017,6 +1062,18 @@ function formatDayColumnHeader(day: Date): string {
 
 .event-chip:hover {
   filter: brightness(1.25);
+}
+
+/* ── My Reservations View ──────────────────────────── */
+.my-reservations-view {
+  margin-top: 1rem;
+}
+
+.notes-cell {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ── Day / Week Time Grid ──────────────────────────────── */
