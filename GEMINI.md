@@ -3,11 +3,11 @@
 This document defines the foundational mandates, architectural standards, and development workflows for the AeroBook Web project. As Gemini CLI, I MUST strictly adhere to these rules.
 
 ## 1. Core Mandates
-
 ### Source Control & User Approval
 - **PLAN BEFORE ACTION:** Always perform research and present a concise technical plan (Strategy) for user approval before making any code changes or file modifications.
-- **NO AUTONOMOUS COMMITS:** Never stage or commit changes without explicit user approval.
+- **NO AUTONOMOUS COMMITS:** NEVER perform a `git commit` or `git push` without explicit, unambiguous user approval for that specific action.
 - **REVIEW FIRST:** Always present a structured summary of changes and offer a full `git diff` before requesting a commit.
+...
 - **COMMIT MESSAGES:** Propose clear, concise commit messages following conventional commits (e.g., `feat:`, `fix:`, `refactor:`, `docs:`).
 
 ### Verification & Quality
