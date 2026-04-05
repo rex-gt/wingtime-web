@@ -117,7 +117,7 @@
     </div>
 
     <!-- ── Day / Week View ────────────────────────────────── -->
-    <div v-else class="time-view">
+    <div v-else class="time-view" ref="timeViewRef">
       <div class="time-view-header">
         <div class="time-gutter-header"></div>
         <div
@@ -129,7 +129,7 @@
           {{ formatDayColumnHeader(day) }}
         </div>
       </div>
-      <div class="time-view-body" ref="timeViewBodyRef">
+      <div class="time-view-body">
         <div class="time-gutter">
           <div v-for="hour in displayHours" :key="hour" class="time-gutter-label">
             {{ formatHour(hour) }}
@@ -395,7 +395,7 @@ const displayHours = Array.from(
 ) // [6, 7, …, 22]
 
 // ── Template Ref ──────────────────────────────────────────
-const timeViewBodyRef = ref<HTMLElement | null>(null)
+const timeViewRef = ref<HTMLElement | null>(null)
 
 // ── Load Data ─────────────────────────────────────────────
 async function loadData() {
@@ -517,8 +517,8 @@ function goToToday() {
 
 function scrollToBusinessHours() {
   nextTick(() => {
-    if (timeViewBodyRef.value && typeof timeViewBodyRef.value.scrollTo === 'function') {
-      timeViewBodyRef.value.scrollTop = (8 - DAY_START_HOUR) * HOUR_HEIGHT
+    if (timeViewRef.value && typeof timeViewRef.value.scrollTo === 'function') {
+      timeViewRef.value.scrollTop = (8 - DAY_START_HOUR) * HOUR_HEIGHT
     }
   })
 }
@@ -1081,18 +1081,27 @@ function formatDayColumnHeader(day: Date): string {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  overflow: hidden;
+  overflow: auto; /* Allow both horizontal and vertical scroll */
+  max-height: 70vh;
+  position: relative;
 }
 
 .time-view-header {
   display: flex;
-  background: rgba(255, 255, 255, 0.06);
+  background: #082f49; /* Solid background for sticky (var(--midnight)) */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .time-gutter-header {
   width: 64px;
   flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  background: #082f49;
+  z-index: 30;
 }
 
 @media (max-width: 480px) {
@@ -1111,12 +1120,14 @@ function formatDayColumnHeader(day: Date): string {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 100px; /* Ensure columns have some width on mobile */
 }
 
 @media (max-width: 480px) {
   .time-col-header {
     font-size: 0.7rem;
     padding: 0.5rem 0.1rem;
+    min-width: 80px;
   }
 }
 
@@ -1126,13 +1137,17 @@ function formatDayColumnHeader(day: Date): string {
 
 .time-view-body {
   display: flex;
-  max-height: 68vh;
-  overflow-y: auto;
+  position: relative;
 }
 
 .time-gutter {
   width: 64px;
   flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  background: #082f49;
+  z-index: 10;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @media (max-width: 480px) {
@@ -1165,17 +1180,17 @@ function formatDayColumnHeader(day: Date): string {
   min-width: 0;
 }
 
-@media (max-width: 768px) {
-  .time-grid {
-    min-width: 500px; /* Force horizontal scroll on small screens for week view */
-  }
-}
-
 .time-col {
   flex: 1;
   position: relative;
   border-left: 1px solid rgba(255, 255, 255, 0.07);
-  min-width: 0;
+  min-width: 100px; /* Match min-width of header */
+}
+
+@media (max-width: 480px) {
+  .time-col {
+    min-width: 80px;
+  }
 }
 
 .hour-slot {
