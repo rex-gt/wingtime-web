@@ -216,10 +216,10 @@ async function handleUpdate() {
   successMessage.value = ''
   errorMessage.value = ''
 
-  // Validate password fields
-  if (formData.value.new_password || formData.value.current_password) {
-    if (!formData.value.new_password || !formData.value.current_password) {
-      errorMessage.value = 'Both current and new password are required to change password'
+  // Validate password fields - only if a new password is being set
+  if (formData.value.new_password) {
+    if (!formData.value.current_password) {
+      errorMessage.value = 'Current password is required to change password'
       return
     }
 
@@ -243,7 +243,7 @@ async function handleUpdate() {
       email: formData.value.email,
       phone: formData.value.phone,
       reminder_hours: formData.value.reminder_hours,
-      ...(formData.value.current_password && {
+      ...(formData.value.new_password && {
         current_password: formData.value.current_password,
         new_password: formData.value.new_password
       })
