@@ -101,6 +101,25 @@
             </div>
           </div>
 
+          <!-- Notification Settings -->
+          <div class="form-section">
+            <h2>Notification Settings</h2>
+            <div class="form-group">
+              <label for="reminder_hours">Reservation Reminder Lead Time (Hours)</label>
+              <div class="input-with-hint">
+                <input
+                  v-model.number="formData.reminder_hours"
+                  type="number"
+                  id="reminder_hours"
+                  min="1"
+                  max="168"
+                  required
+                />
+                <span class="hint-text">How many hours before your flight should we email you? (1-168)</span>
+              </div>
+            </div>
+          </div>
+
           <!-- Member Information Display -->
           <div class="form-section info-section">
             <h2>Member Information</h2>
@@ -157,6 +176,7 @@ interface FormData {
   last_name: string
   email: string
   phone?: string
+  reminder_hours: number
   current_password?: string
   new_password?: string
   confirm_password?: string
@@ -167,6 +187,7 @@ const formData = ref<FormData>({
   last_name: authStore.user?.last_name || '',
   email: authStore.user?.email || '',
   phone: authStore.user?.phone || '',
+  reminder_hours: authStore.user?.reminder_hours || 24,
   current_password: '',
   new_password: '',
   confirm_password: ''
@@ -221,6 +242,7 @@ async function handleUpdate() {
       last_name: formData.value.last_name,
       email: formData.value.email,
       phone: formData.value.phone,
+      reminder_hours: formData.value.reminder_hours,
       ...(formData.value.current_password && {
         current_password: formData.value.current_password,
         new_password: formData.value.new_password
@@ -364,6 +386,17 @@ function goBack() {
   margin-top: 0.25rem;
   color: #fca5a5;
   font-size: 0.8rem;
+}
+
+.input-with-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hint-text {
+  font-size: 0.8rem;
+  color: #94a3b8;
 }
 
 .info-section {

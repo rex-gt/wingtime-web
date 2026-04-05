@@ -128,5 +128,6 @@ export interface User {
   phone?: string
   role: Role
   is_active: boolean
+  reminder_hours: number
   created_at: string
 }
