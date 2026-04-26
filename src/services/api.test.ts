@@ -146,7 +146,12 @@ describe('aircraftAPI', () => {
 describe('reservationsAPI', () => {
   it('getAll calls GET /reservations', () => {
     reservationsAPI.getAll()
-    expect(mockGet).toHaveBeenCalledWith('/reservations')
+    expect(mockGet).toHaveBeenCalledWith('/reservations', { params: undefined })
+  })
+
+  it('getAll calls GET /reservations with filters', () => {
+    reservationsAPI.getAll({ member_id: 1, needs_log: true })
+    expect(mockGet).toHaveBeenCalledWith('/reservations', { params: { member_id: 1, needs_log: true } })
   })
 
   it('create posts to /reservations', () => {
