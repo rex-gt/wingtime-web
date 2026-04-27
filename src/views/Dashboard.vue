@@ -171,7 +171,7 @@ const showLogModal = ref(false)
 const logError = ref('')
 const isSubmittingLog = ref(false)
 const logData = ref({
-  completed: true as boolean | null,
+  completed: null as boolean | null,
   hours: 0,
   reason: ''
 })
@@ -253,6 +253,11 @@ async function loadData() {
 async function submitFlightLog() {
   if (!currentNeedsLogRes.value) return
   
+  if (logData.value.completed === null) {
+    logError.value = 'Please select whether the flight was completed.'
+    return
+  }
+  
   logError.value = ''
   isSubmittingLog.value = true
   
@@ -260,12 +265,16 @@ async function submitFlightLog() {
     const res = currentNeedsLogRes.value
     
     if (logData.value.completed) {
+      const aircraftInfo = aircraft.value.find(a => a.id === res.aircraft_id)
+      const tachStart = Number(aircraftInfo?.current_tach_hours || 0)
+      const hours = Number(logData.value.hours)
+
       await flightLogsAPI.create({
         reservation_id: res.id,
         member_id: res.member_id,
         aircraft_id: res.aircraft_id,
-        tach_start: 0, // In a full app, this would come from the aircraft current tach
-        tach_end: Number(logData.value.hours),
+        tach_start: tachStart,
+        tach_end: tachStart + hours,
         flight_date: new Date(res.start_time).toISOString().split('T')[0]
       })
       await reservationsAPI.update(res.id, { status: 'completed' })
@@ -277,7 +286,7 @@ async function submitFlightLog() {
     }
     
     await loadData()
-    logData.value = { completed: true, hours: 0, reason: '' }
+    logData.value = { completed: null, hours: 0, reason: '' }
     if (needsLogReservations.value.length === 0) {
       showLogModal.value = false
     }
