@@ -266,7 +266,12 @@ async function submitFlightLog() {
     
     if (logData.value.completed) {
       const aircraftInfo = aircraft.value.find(a => a.id === res.aircraft_id)
-      const tachStart = Number(aircraftInfo?.current_tach_hours || 0)
+      if (!aircraftInfo) {
+        logError.value = 'Unable to find the selected aircraft. Please refresh and try again.'
+        return
+      }
+
+      const tachStart = Number(aircraftInfo.current_tach_hours)
       const hours = Number(logData.value.hours)
 
       await flightLogsAPI.create({
@@ -281,7 +286,7 @@ async function submitFlightLog() {
     } else {
       await reservationsAPI.update(res.id, { 
         status: 'cancelled', 
-        notes: (res.notes ? res.notes + ' ' : '') + 'Not completed: ' + logData.value.reason 
+        notes: [res.notes?.trim(), 'Not completed: ' + logData.value.reason].filter(Boolean).join(' ')
       })
     }
     
